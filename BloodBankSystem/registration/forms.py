@@ -75,7 +75,7 @@ class TransfusionForm(ModelForm):
         fields = ['recipient', 'hospital', 'transfusion_date']
 
 
-class Request(ModelForm):
+class RequestForm(ModelForm):
     recipient = models.CharField(widget=forms.ChoiceField)
     hospital = models.ForeignKey(widget=forms.ChoiceField)
     transfusion_date = models.DateField(widget=forms.DateField)
