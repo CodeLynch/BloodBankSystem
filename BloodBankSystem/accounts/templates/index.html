@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+<nav>
+    <a href="{% url 'accounts:index' %}">
+        {% if request.session.type == 'D' %} Donor: {{ request.session.first_name }} {{ request.session.last_name }}
+        {% elif request.session.type == 'R' %} Recipient: {{ request.session.first_name }} {{ request.session.last_name }}
+        {% elif request.session.type == 'H' %} Hospital: {{ request.session.name }}
+        {% elif request.session.type == 'B' %} Blood Bank: {{ request.session.name }}
+        {% endif %}
+    </a>
+    <ul>
+        {% if request.session.type == 'D' %}
+        <li><a href="">Donations</a></li>
+        <li><a href="">Edit Profile</a></li>
+        {% elif request.session.type == 'R' %}
+        <li><a href="">Transfusion</a></li>
+        <li><a href="">Add Transfusion</a></li>
+        <li><a href="">Edit Profile</a></li>
+        {% elif request.session.type == 'H' %}
+        <li><a href="">Request Supply</a></li>
+        <li><a href="">Edit Profile</a></li>
+        {% elif request.session.type == 'B' %}
+        <li><a href="">Create Blood Supply</a></li>
+        <li><a href="">Update Blood Supply</a></li>
+        <li><a href="">Edit Profile</a></li>
+        {% endif %}
+        <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+    </ul>
+</nav>
+{% endblock %}

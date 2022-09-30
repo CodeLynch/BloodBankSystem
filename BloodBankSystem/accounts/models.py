@@ -1,12 +1,13 @@
 from django.db import models
+from django.core.validators import RegexValidator
 
+contact_number_validator = RegexValidator(regex= r'^(09|\+639)\d{9}$')
 
-# Create your models here.
 class User(models.Model):
     type_user = (('I', 'Individual'), ('O', 'Organization'))
     user_id = models.AutoField(primary_key=True)
-    username = models.CharField(max_length=20)
-    password = models.CharField(max_length=20)
+    username = models.CharField(max_length=50, unique=True)
+    password = models.CharField(max_length=50)
     type = models.CharField(max_length=1, choices=type_user)
 
 
@@ -14,15 +15,18 @@ class Individual(User):
     type_individual = (('D', 'Donor'), ('R', 'Recipient'))
     type_blood = (('A+', 'A+'), ('B+', 'B+'), ('AB+', 'AB+'), ('O+', 'O+'), ('A-', 'A-'), ('B-', 'B-'),
                   ('AB-', 'AB-'), ('O-', 'O-'))
-    first_name = models.CharField(max_length=20)
-    middle_name = models.CharField(max_length=20, null=True, blank=True)
-    last_name = models.CharField(max_length=20)
+    first_name = models.CharField(max_length=50)
+    middle_name = models.CharField(max_length=50, null=True, blank=True)
+    last_name = models.CharField(max_length=50)
     age = models.IntegerField()
     weight = models.FloatField()
-    contact_number = models.CharField(max_length=11)
-    health_condition = models.CharField(max_length=20, null=True, blank=True)
+    contact_number = models.CharField(max_length=13, validators=[contact_number_validator])
+    health_condition = models.CharField(max_length=50, null=True, blank=True)
     blood_type = models.CharField(max_length=3, choices=type_blood)
     individual_type = models.CharField(max_length=1, choices=type_individual)
+
+    def __str__(self):
+        return '%s: %s %s' % (self.user_id, self.first_name, self.last_name)
 
 
 class BloodSupply(models.Model):
@@ -36,14 +40,20 @@ class BloodSupply(models.Model):
     oplus_amount = models.IntegerField(default=0)
     omin_amount = models.IntegerField(default=0)
 
+    def __str__(self):
+        return '%s' % (self.supply_id)
+
 
 class Organization(User):
     type_organization = (('H', 'Hospital'), ('B', 'Blood Bank'))
-    name = models.CharField(max_length=20)
-    address = models.CharField(max_length=20)
-    contact_number = models.CharField(max_length=11)
-    blood_supply = models.ForeignKey(BloodSupply, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    address = models.CharField(max_length=50)
+    contact_number = models.CharField(max_length=13, validators=[contact_number_validator])
+    blood_supply = models.ForeignKey(BloodSupply, null=True, on_delete=models.SET_NULL)
     org_type = models.CharField(max_length=1, choices=type_organization)
+
+    def __str__(self):
+        return '%s: %s' % (self.user_id, self.name)
 
 
 class Donor(Individual):
