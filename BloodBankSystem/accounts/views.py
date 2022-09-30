@@ -117,3 +117,31 @@ class BloodBankRegistrationView(View):
             form.save()
             return redirect(reverse('accounts:login'))
         return render(request, self.template, context)
+
+
+class EditRecipientView(View):
+    template = 'edit_recipient.html'
+
+    def get(self, request):
+        recipient = Recipient.objects.get(username=request.session['username'])
+        form = RecipientForm(instance=recipient)
+        return render(request, self.template, {'form': form})
+
+    def post(self, request):
+        recipient = Recipient.objects.get(username=request.session['username'])
+        form = RecipientForm(request.POST, instance=recipient)
+        if form.is_valid():
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            form.save()
+            # print(username)
+            try:
+                if Recipient.objects.get(username=username):
+                    recipient = Recipient.objects.get(username=username)
+                    if recipient.password == password:
+                        request.session['username'] = recipient.username
+                        request.session['first_name'] = recipient.first_name
+                        request.session['last_name'] = recipient.last_name
+            except User.DoesNotExist:
+                user = None
+        return redirect(reverse('accounts:index'))

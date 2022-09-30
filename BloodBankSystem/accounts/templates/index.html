@@ -18,9 +18,9 @@ Home
         <li><a href="">Donations</a></li>
         <li><a href="">Edit Profile</a></li>
         {% elif request.session.type == 'R' %}
-        <li><a href="">Transfusion</a></li>
+        <li><a href="{% url 'transfusion:index' %}">Transfusion</a></li>
         <li><a href="">Add Transfusion</a></li>
-        <li><a href="">Edit Profile</a></li>
+        <li><a href="{% url 'accounts:edit_recipient' %}">Edit Profile</a></li>
         {% elif request.session.type == 'H' %}
         <li><a href="">Request Supply</a></li>
         <li><a href="">Edit Profile</a></li>
