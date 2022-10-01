@@ -5,6 +5,14 @@
     <title>Blood Bank System | {% block title %} {% endblock %} </title>
 </head>
 <body>
+    {% include 'messages.html' %}
     {% block content %} {% endblock %}
+    <script>
+          var message = document.getElementById("msg");
+
+        setTimeout(function(){
+            message.style.display = "none";
+        }, 1500);
+    </script>
 </body>
 </html>
