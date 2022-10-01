@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
-
+from django.contrib import messages
 from accounts.models import Recipient, Hospital
 from transfusion.forms import TransfusionForm
 
@@ -25,5 +25,7 @@ class TransfusionView(View):
             recipient = Recipient.objects.get(username=request.session['username'])
             transfusion.recipient = recipient
             transfusion.save()
-        return redirect(reverse('accounts:index'))
+            messages.success(request, 'Transfusion Recorded Successfully!')
+            return redirect(reverse('accounts:index'))
+        return render(request, self.template, {'form': form})
 

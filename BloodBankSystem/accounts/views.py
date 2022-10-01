@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.views import View
 from .models import User, Individual, Organization, Donor, Recipient, Hospital, BloodBank
 from .forms import DonorForm, RecipientForm, HospitalForm, BloodBankForm
-
+from django.contrib import messages
 
 class HomeView(View):
     template = 'index.html'
@@ -124,25 +124,53 @@ class EditRecipientView(View):
     template = 'edit_profile.html'
 
     def get(self, request):
-        recipient = Recipient.objects.get(username=request.session['username'])
-        form = RecipientForm(instance=recipient)
+        user = User.objects.get(username=request.session['username'])
+        if user.type == 'I':
+            individual = Individual.objects.get(username=user.username)
+            if individual.individual_type == 'R':
+                form = RecipientForm(instance=individual)
+            else:
+                form = DonorForm(instance=individual)
+        elif user.type == 'O':
+            org = Organization.objects.get(username=user.username)
+            if org.org_type == 'H':
+                form = HospitalForm(instance=org)
+            else:
+                form = BloodBankForm(instance=org)
         return render(request, self.template, {'form': form})
 
     def post(self, request):
-        recipient = Recipient.objects.get(username=request.session['username'])
-        form = RecipientForm(request.POST, instance=recipient)
+        user = User.objects.get(username=request.session['username'])
+        if user.type == 'I':
+            individual = Individual.objects.get(username=user.username)
+            if individual.individual_type == 'R':
+                form = RecipientForm(request.POST, instance=individual)
+            else:
+                form = DonorForm(request.POST, instance=individual)
+        elif user.type == 'O':
+            org = Organization.objects.get(username=user.username)
+            if org.org_type == 'H':
+                form = HospitalForm(request.POST, instance=org)
+            else:
+                form = BloodBankForm(request.POST, instance=org)
         if form.is_valid():
             username = request.POST.get('username')
             password = request.POST.get('password')
             form.save()
-            # print(username)
+            messages.success(request, 'Profile Updated Successfully!')
             try:
-                if Recipient.objects.get(username=username):
-                    recipient = Recipient.objects.get(username=username)
-                    if recipient.password == password:
-                        request.session['username'] = recipient.username
-                        request.session['first_name'] = recipient.first_name
-                        request.session['last_name'] = recipient.last_name
+                if User.objects.get(username=username):
+                    user = User.objects.get(username=username)
+                    if user.password == password:
+                        request.session['username'] = user.username
+                        if user.type == 'I':
+                            individual = Individual.objects.get(username=user.username)
+                            request.session['first_name'] = individual.first_name
+                            request.session['last_name'] = individual.last_name
+                        elif user.type == 'O':
+                            org = Organization.objects.get(username=user.username)
+                            request.session['name'] = org.name
             except User.DoesNotExist:
                 user = None
-        return redirect(reverse('accounts:index'))
+            return redirect(reverse('accounts:index'))
+        return render(request, self.template, {'form': form})
