@@ -22,4 +22,5 @@ urlpatterns = [
     path('transfusion/', include('transfusion.urls')),
     path('storage/', include('storage.urls')),
     path('request/', include('request.urls')),
+    path('donation/', include('donation.urls')),
 ]

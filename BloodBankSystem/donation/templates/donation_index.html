@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Donation
+{% endblock %}
+
+{% block content %}
+<p>Record Transfusion</p>
+<form method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">Save</button>
+    <button onclick="location.href='{% url 'accounts:index' %}'" type="reset">Cancel</button>
+</form>
+{% endblock %}

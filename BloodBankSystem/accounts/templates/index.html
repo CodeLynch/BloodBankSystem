@@ -20,7 +20,7 @@ Home
     </a>
     <ul>
         {% if request.session.type == 'D' %}
-        <li><a href="">Add Donation</a></li>
+        <li><a href="{% url 'donation:index' %}">Add Donation</a></li>
         <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
         {% elif request.session.type == 'R' %}
         <li><a href="{% url 'transfusion:index' %}">Add Transfusion</a></li>

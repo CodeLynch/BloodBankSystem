@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'transfusion',
     'storage',
     'request',
+    'donation',
 ]
 
 MIDDLEWARE = [
