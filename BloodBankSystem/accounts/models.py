@@ -19,9 +19,9 @@ class Individual(User):
     middle_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=50)
     age = models.IntegerField()
-    weight = models.FloatField()
+    weight = models.FloatField(verbose_name='Weight (kg)')
     contact_number = models.CharField(max_length=13, validators=[contact_number_validator])
-    health_condition = models.CharField(max_length=50, null=True, blank=True)
+    health_condition = models.TextField(max_length=50, null=True, blank=True, verbose_name='Health conditions (optional)')
     blood_type = models.CharField(max_length=3, choices=type_blood)
     individual_type = models.CharField(max_length=1, choices=type_individual)
 
