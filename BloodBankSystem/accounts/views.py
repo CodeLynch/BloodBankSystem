@@ -120,7 +120,7 @@ class BloodBankRegistrationView(View):
         return render(request, self.template, context)
 
 
-class EditRecipientView(View):
+class EditProfileView(View):
     template = 'edit_profile.html'
 
     def get(self, request):
