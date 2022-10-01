@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'accounts',
     'transfusion',
     'storage',
+    'request',
 ]
 
 MIDDLEWARE = [

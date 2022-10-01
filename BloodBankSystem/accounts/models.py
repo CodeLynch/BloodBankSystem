@@ -104,3 +104,4 @@ class Request(models.Model):
     blood_bank = models.ForeignKey(BloodBank, on_delete=models.CASCADE)
     status = models.BooleanField(default=False)
 
+    
