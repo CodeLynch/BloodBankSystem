@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create a Blood Supply</title>
+</head>
+<body>
+
+<h1>Create Blood Supply</h1>
+    <form method="POST">
+        {% csrf_token %}
+       {{form.as_p}}
+        <button onclick="{% url 'accounts:index' %}">CANCEL</button>
+        <input type="submit" value="CREATE"><br>
+    </form>
+</body>
+</html>

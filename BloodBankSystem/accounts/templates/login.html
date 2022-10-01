@@ -17,13 +17,13 @@ Login
 <span>Don't have an account?</span>
 <div>
     Register as: 
-    <a href="{% url 'accounts:register_donor' %}">Donor</a>
+    <a href="{% url 'accounts:register_donor' %}">Donor</a> |
     <a href="{% url 'accounts:register_recipient' %}">Recipient</a>
 </div>
 <span>or</span>
 <div>
     Register your organization: 
-    <a href="{% url 'accounts:register_hospital' %}">Hospital</a>
+    <a href="{% url 'accounts:register_hospital' %}">Hospital</a> |
     <a href="{% url 'accounts:register_blood_bank' %}">Blood Bank</a>
 </div>
 {% endblock %}

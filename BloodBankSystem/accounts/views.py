@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
-from.models import User, Individual, Organization, Donor, Recipient, Hospital, BloodBank
+from .models import User, Individual, Organization, Donor, Recipient, Hospital, BloodBank
 from .forms import DonorForm, RecipientForm, HospitalForm, BloodBankForm
+
 
 class HomeView(View):
     template = 'index.html'
@@ -37,6 +38,7 @@ class LoginView(View):
                         org = Organization.objects.get(username=user.username)
                         request.session['name'] = org.name
                         request.session['type'] = org.org_type
+                        request.session['blood_supply_id'] = org.blood_supply_id
                     return redirect(reverse('accounts:index'))
         except User.DoesNotExist:
             user = None
@@ -57,7 +59,7 @@ class DonorRegistrationView(View):
         form = DonorForm()
         context = {'form': form}
         return render(request, self.template, context)
-    
+
     def post(self, request):
         form = DonorForm(request.POST)
         context = {'form': form}
@@ -74,7 +76,7 @@ class RecipientRegistrationView(View):
         form = RecipientForm()
         context = {'form': form}
         return render(request, self.template, context)
-    
+
     def post(self, request):
         form = RecipientForm(request.POST)
         context = {'form': form}
@@ -91,7 +93,7 @@ class HospitalRegistrationView(View):
         form = HospitalForm()
         context = {'form': form}
         return render(request, self.template, context)
-    
+
     def post(self, request):
         form = HospitalForm(request.POST)
         context = {'form': form}
@@ -108,7 +110,7 @@ class BloodBankRegistrationView(View):
         form = BloodBankForm()
         context = {'form': form}
         return render(request, self.template, context)
-    
+
     def post(self, request):
         form = BloodBankForm(request.POST)
         context = {'form': form}

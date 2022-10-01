@@ -3,6 +3,7 @@ from django.core.validators import RegexValidator
 
 contact_number_validator = RegexValidator(regex= r'^(09|\+639)\d{9}$')
 
+
 class User(models.Model):
     type_user = (('I', 'Individual'), ('O', 'Organization'))
     user_id = models.AutoField(primary_key=True)
