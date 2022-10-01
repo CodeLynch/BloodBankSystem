@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
 from django.urls import reverse
 from django.views import View
 from.models import User, Individual, Organization, Donor, Recipient, Hospital, BloodBank
@@ -120,7 +119,7 @@ class BloodBankRegistrationView(View):
 
 
 class EditRecipientView(View):
-    template = 'edit_recipient.html'
+    template = 'edit_profile.html'
 
     def get(self, request):
         recipient = Recipient.objects.get(username=request.session['username'])
