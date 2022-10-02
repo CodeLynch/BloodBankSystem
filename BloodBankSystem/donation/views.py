@@ -7,6 +7,7 @@ from donation.forms import DonationForm
 
 # Create your views here.
 
+
 class DonationView(View):
     template = 'donation_index.html'
 

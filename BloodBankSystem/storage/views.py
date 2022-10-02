@@ -13,11 +13,11 @@ class CreateBloodSupplyView(View):
         if 'username' not in request.session:
             return redirect(reverse('accounts:login'))
         else:
-            form = CreateBloodSupplyForm
+            form = BloodSupplyForm
             return render(request, self.template, {'form': form})
 
     def post(self, request):
-        form = CreateBloodSupplyForm(request.POST)
+        form = BloodSupplyForm(request.POST)
         if form.is_valid():
             form.save()
             org = Organization.objects.get(username=request.session['username'])
@@ -38,12 +38,12 @@ class UpdateBloodSupplyView(View):
             return redirect(reverse('accounts:login'))
         else:
             bloodSupply = BloodSupply.objects.get(pk=request.session['blood_supply_id'])
-            form = UpdateBloodSupplyForm(instance=bloodSupply)
+            form = BloodSupplyForm(instance=bloodSupply)
             return render(request, self.template, {'form': form})
 
     def post(self, request):
         bloodSupply = BloodSupply.objects.get(pk=request.session['blood_supply_id'])
-        form = UpdateBloodSupplyForm(request.POST, instance=bloodSupply)
+        form = BloodSupplyForm(request.POST, instance=bloodSupply)
         if form.is_valid():
             form.save()
             messages.success(request, 'Blood supply updated successfully!')
@@ -60,5 +60,5 @@ class DeleteBloodSupplyView(View):
             owned_supply = BloodSupply.objects.get(pk=request.session['blood_supply_id'])
             owned_supply.delete()
             request.session['blood_supply_id'] = None
-            messages.success(request, 'Blood supply deleted succesfully.')
+            messages.success(request, 'Blood supply deleted successfully.')
             return redirect(reverse('accounts:index'))
