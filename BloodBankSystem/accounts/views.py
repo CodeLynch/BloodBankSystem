@@ -66,7 +66,7 @@ class LogoutView(View):
 
     def get(self, request):
         request.session.flush()
-        messages.success(request, 'User was logged out sucessfully.')
+        messages.success(request, 'User was logged out successfully.')
         return redirect(reverse('accounts:login'))
 
 

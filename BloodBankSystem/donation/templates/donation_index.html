@@ -8,10 +8,10 @@ Add Donation
 <!-- Navbar -->
 <nav>
     <a href="{% url 'accounts:index' %}">
-        Recipient: {{ request.session.first_name }} {{ request.session.last_name }}
+        Donor: {{ request.session.first_name }} {{ request.session.last_name }}
     </a>
     <ul>
-        <li><a href="{% url 'donation:index' %}">Add Transfusion</a></li>
+        <li><a href="{% url 'donation:index' %}">Add Donation</a></li>
         <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
         <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
     </ul>
