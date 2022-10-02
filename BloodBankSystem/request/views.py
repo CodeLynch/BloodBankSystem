@@ -19,8 +19,13 @@ class RequestBloodSupplyView(View):
 
     def post(self, request):
         form = RequestBloodSupplyForm(request.POST)
+        user_id = request.POST['hospital'].split(":")[0]
         if form.is_valid():
-            form.save()
+            hospital= Hospital.objects.get(user_id=user_id)
+            requestt = form.save(commit=False)
+            requestt.hospital = hospital
+            requestt.status = True
+            requestt.save()
             messages.success(request, 'Blood supply requested successfully!')
             return redirect(reverse('accounts:index'))
         return render(request, self.template, {'form': form})
