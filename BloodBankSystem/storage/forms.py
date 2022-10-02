@@ -1,9 +1,8 @@
-from django.forms import ModelForm
 from django import forms
 from .models import *
 
 
-class CreateBloodSupplyForm(ModelForm):
+class CreateBloodSupplyForm(forms.ModelForm):
 
     aplus_amount = forms.IntegerField(widget=forms.NumberInput),
     amin_amount = forms.IntegerField(widget=forms.NumberInput),
@@ -20,7 +19,7 @@ class CreateBloodSupplyForm(ModelForm):
                   'abplus_amount', 'abmin_amount', 'oplus_amount', 'omin_amount']
 
 
-class UpdateBloodSupplyForm(ModelForm):
+class UpdateBloodSupplyForm(forms.ModelForm):
     aplus_amount = forms.IntegerField(widget=forms.NumberInput),
     amin_amount = forms.IntegerField(widget=forms.NumberInput),
     bplus_amount = forms.IntegerField(widget=forms.NumberInput),

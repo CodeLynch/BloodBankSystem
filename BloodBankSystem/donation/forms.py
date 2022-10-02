@@ -5,10 +5,9 @@ from accounts.models import Donation, BloodBank
 
 
 class DonationForm(ModelForm):
-    bloodbank = forms.ModelChoiceField(widget=forms.Select(), queryset=BloodBank.objects.only('user_id'))
-    donation_date = forms.CharField(widget=forms.TextInput)
-    status = False
+    blood_bank = forms.ModelChoiceField(widget=forms.Select(), queryset=BloodBank.objects.only('user_id'))
+    donation_date = forms.DateField(widget=forms.DateInput(attrs={'placeholder': 'yyyy-mm-dd'}), error_messages={'invalid': 'Please enter a valid date (yyyy-mm-dd).'})
 
     class Meta:
         model = Donation
-        fields = ['bloodbank', 'donation_date']
+        fields = ['blood_bank', 'donation_date']

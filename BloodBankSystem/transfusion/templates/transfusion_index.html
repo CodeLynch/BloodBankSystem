@@ -1,15 +1,27 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Transfusion
+Add Transfusion
 {% endblock %}
 
 {% block content %}
-<p>Record Transfusion</p>
+<!-- Navbar -->
+<nav>
+    <a href="{% url 'accounts:index' %}">
+        Recipient: {{ request.session.first_name }} {{ request.session.last_name }}
+    </a>
+    <ul>
+        <li><a href="{% url 'transfusion:index' %}">Add Transfusion</a></li>
+        <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
+        <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+    </ul>
+</nav>
+
+<!-- Main -->
+<h1>Add Transfusion</h1>
 <form method="post">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button type="submit">Save</button>
-    <button onclick="location.href='{% url 'accounts:index' %}'" type="reset">Cancel</button>
+{% csrf_token %}
+{{form.as_p}}
+<button type="submit">Save</button>
 </form>
 {% endblock %}

@@ -1,18 +1,18 @@
 from django import forms
-from .models import *
+from accounts.models import *
 
 
 class DonorForm(forms.ModelForm):
-    username = forms.CharField(widget=forms.TextInput()),
-    password = forms.CharField(widget=forms.PasswordInput()),
+    username = forms.CharField(widget=forms.TextInput())
+    password = forms.CharField(widget=forms.PasswordInput())
     type = 'I'
-    first_name = forms.CharField(widget=forms.TextInput()),
+    first_name = forms.CharField(widget=forms.TextInput())
     middle_name = forms.CharField(widget=forms.TextInput()),
-    last_name = forms.CharField(widget=forms.TextInput()),
+    last_name = forms.CharField(widget=forms.TextInput())
     contact_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '09XXXXXXXXX'}), error_messages={'invalid': 'Please enter a valid contact number (09XXXXXXXXX).'})
-    age = forms.IntegerField(widget=forms.NumberInput()),
-    weight = forms.FloatField(widget=forms.Select()),
-    blood_type = forms.CharField(widget=forms.Select(attrs={'is_hidden': False})),
+    age = forms.IntegerField(widget=forms.NumberInput())
+    weight = forms.FloatField(widget=forms.NumberInput()),
+    blood_type = forms.CharField(widget=forms.Select()),
     health_condition = forms.CharField(widget=forms.Textarea()),
     individual_type = 'D'
 
@@ -27,14 +27,14 @@ class DonorForm(forms.ModelForm):
 
 
 class RecipientForm(forms.ModelForm):
-    username = forms.CharField(widget=forms.TextInput()),
-    password = forms.CharField(widget=forms.PasswordInput()),
+    username = forms.CharField(widget=forms.TextInput())
+    password = forms.CharField(widget=forms.PasswordInput())
     type = 'I'
-    first_name = forms.CharField(widget=forms.TextInput()),
+    first_name = forms.CharField(widget=forms.TextInput())
     middle_name = forms.CharField(widget=forms.TextInput()),
-    last_name = forms.CharField(widget=forms.TextInput()),
+    last_name = forms.CharField(widget=forms.TextInput())
     contact_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '09XXXXXXXXX'}), error_messages={'invalid': 'Please enter a valid contact number (09XXXXXXXXX).'})
-    age = forms.IntegerField(widget=forms.NumberInput()),
+    age = forms.IntegerField(widget=forms.NumberInput())
     weight = forms.FloatField(widget=forms.NumberInput()),
     blood_type = forms.CharField(widget=forms.Select()),
     health_condition = forms.CharField(widget=forms.Textarea()),
@@ -51,11 +51,11 @@ class RecipientForm(forms.ModelForm):
 
 
 class HospitalForm(forms.ModelForm):
-    username = forms.CharField(widget=forms.TextInput()),
-    password = forms.CharField(widget=forms.PasswordInput()),
+    username = forms.CharField(widget=forms.TextInput())
+    password = forms.CharField(widget=forms.PasswordInput())
     type = 'O'
-    name = forms.CharField(widget=forms.TextInput()),
-    address = forms.CharField(widget=forms.TextInput()),
+    name = forms.CharField(widget=forms.TextInput())
+    address = forms.CharField(widget=forms.TextInput())
     contact_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '09XXXXXXXXX'}), error_messages={'invalid': 'Please enter a valid contact number (09XXXXXXXXX).'})
     org_type = 'H'
 
@@ -70,11 +70,11 @@ class HospitalForm(forms.ModelForm):
 
 
 class BloodBankForm(forms.ModelForm):
-    username = forms.CharField(widget=forms.TextInput()),
-    password = forms.CharField(widget=forms.PasswordInput()),
+    username = forms.CharField(widget=forms.TextInput())
+    password = forms.CharField(widget=forms.PasswordInput())
     type = 'O'
-    name = forms.CharField(widget=forms.TextInput()),
-    address = forms.CharField(widget=forms.TextInput()),
+    name = forms.CharField(widget=forms.TextInput())
+    address = forms.CharField(widget=forms.TextInput())
     contact_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '09XXXXXXXXX'}), error_messages={'invalid': 'Please enter a valid contact number (09XXXXXXXXX).'})
     org_type = 'B'
 

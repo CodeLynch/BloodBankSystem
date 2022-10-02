@@ -5,43 +5,126 @@ Home
 {% endblock %}
 
 {% block content %}
+<!-- Navbar -->
 <nav>
-       <!-- just a suggestion, feel free to remove if dili ninyo feel XD-->
-       {% if request.session.username != '' %}
-       <h1>Welcome, {{request.session.username}}!</h1>
-       {% endif %}
-    <a href="{% url 'accounts:index' %}">
-
-        {% if request.session.type == 'D' %} Donor: {{ request.session.first_name }} {{ request.session.last_name }}
-        {% elif request.session.type == 'R' %} Recipient: {{ request.session.first_name }} {{ request.session.last_name }}
-        {% elif request.session.type == 'H' %} Hospital: {{ request.session.name }}
-        {% elif request.session.type == 'B' %} Blood Bank: {{ request.session.name }}
-        {% endif %}
-    </a>
-    <ul>
-        {% if request.session.type == 'D' %}
-        <li><a href="{% url 'donation:index' %}">Add Donation</a></li>
-        <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
-        {% elif request.session.type == 'R' %}
-        <li><a href="{% url 'transfusion:index' %}">Add Transfusion</a></li>
-        <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
-        {% elif request.session.type == 'H' %}
-                    <li><a href="{% url 'request:request_blood_supply' %}">Request Supply</a></li>
-                 {% if request.session.blood_supply_id == None %}
-                    <li><a href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
-                 {% else %}
-                    <li><a href="{% url 'storage:update_blood_supply' %}">Update Blood Supply</a></li>
-                 {% endif %}
-        <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
-        {% elif request.session.type == 'B' %}
-                 {% if request.session.blood_supply_id == None %}
-                    <li><a href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
-                 {% else %}
-                    <li><a href="{% url 'storage:update_blood_supply' %}">Update Blood Supply</a></li>
-                 {% endif %}
-        <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
-        {% endif %}
-        <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
-    </ul>
+   <a href="{% url 'accounts:index' %}">
+      {% if request.session.type == 'D' %} 
+         Donor: {{ request.session.first_name }} {{ request.session.last_name }}
+      {% elif request.session.type == 'R' %} 
+         Recipient: {{ request.session.first_name }} {{ request.session.last_name }}
+      {% elif request.session.type == 'H' %} 
+         Hospital: {{ request.session.name }}
+      {% elif request.session.type == 'B' %} 
+         Blood Bank: {{ request.session.name }}
+      {% endif %}
+   </a>
+   <ul>
+      {% if request.session.type == 'D' %}
+         <li><a href="{% url 'donation:index' %}">Add Donation</a></li>
+         <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
+      {% elif request.session.type == 'R' %}
+         <li><a href="{% url 'transfusion:index' %}">Add Transfusion</a></li>
+         <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
+      {% elif request.session.type == 'H' %}
+         <li><a href="{% url 'request:request_blood_supply' %}">Request Blood Supply</a></li>
+         {% if request.session.blood_supply_id == None %}
+            <li><a href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
+         {% else %}
+            <li><a href="{% url 'storage:update_blood_supply' %}">Update Blood Supply</a></li>
+         {% endif %}
+         <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
+      {% elif request.session.type == 'B' %}
+         {% if request.session.blood_supply_id == None %}
+            <li><a href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
+         {% else %}
+            <li><a href="{% url 'storage:update_blood_supply' %}">Update Blood Supply</a></li>
+         {% endif %}
+         <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
+      {% endif %}
+         <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+   </ul>
 </nav>
+
+<!-- Main -->
+{% if request.session.username != '' %}
+   <h1>Welcome, {{request.session.username}}!</h1>
+{% endif %}
+
+{% if request.session.type == 'R' %}
+   <table style="width:50%">
+      <thead>
+         <tr>
+            <th>Hospital</th>
+            <th>Transfusion Date</th>
+            <th>Status</th>
+         </tr>     
+      </thead>
+      <tbody>
+         {% for transfusion in transfusions %}
+            <tr>
+               <td>{{ transfusion.hospital }}</td>
+               <td>{{ transfusion.transfusion_date }}</td>
+               <td>{{ transfusion.status }}</td>
+            </tr>
+         {% endfor %}
+      </tbody>
+   </table>
+{% elif request.session.type == 'H' %}
+   <table style="width:50%">
+      <thead>
+         <tr>
+            <th>Recipient</th>
+            <th>Transfusion Date</th>
+            <th>Status</th>
+         </tr>     
+      </thead>
+      <tbody>
+         {% for transfusion in transfusions %}
+            <tr>
+               <td>{{ transfusion.recipient }}</td>
+               <td>{{ transfusion.transfusion_date }}</td>
+               <td>{{ transfusion.status }}</td>
+            </tr>
+         {% endfor %}
+      </tbody>
+   </table>
+{% elif request.session.type == 'B' %}
+   <table style="width:50%">
+      <thead>
+         <tr>
+            <th>Donor</th>
+            <th>Donation Date</th>
+            <th>Status</th>
+         </tr>     
+      </thead>
+      <tbody>
+         {% for donation in donations %}
+            <tr>
+               <td>{{ donation.donor }}</td>
+               <td>{{ donation.donation_date }}</td>
+               <td>{{ donation.status }}</td>
+            </tr>
+         {% endfor %}
+      </tbody>
+   </table>
+{% elif request.session.type == 'D' %}
+   <table style="width:50%">
+      <thead>
+         <tr>
+            <th>Blood Bank</th>
+            <th>Donation Date</th>
+            <th>Status</th>
+         </tr>     
+      </thead>
+      <tbody>
+         {% for donation in donations %}
+            <tr>
+               <td>{{ donation.blood_bank }}</td>
+               <td>{{ donation.donation_date }}</td>
+               <td>{{ donation.status }}</td>
+            </tr>
+         {% endfor %}
+      </tbody>
+   </table>
+{% endif %}
 {% endblock %}

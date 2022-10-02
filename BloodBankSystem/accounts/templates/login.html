@@ -5,7 +5,7 @@ Login
 {% endblock %}
 
 {% block content %}
-{{request.session.username}}
+<h1>Login</h1>
 <form method="post">
     {% csrf_token %}
     <label for="username">Username</label>

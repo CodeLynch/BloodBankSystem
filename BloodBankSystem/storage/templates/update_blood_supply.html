@@ -1,17 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Update Blood Supply</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+<!-- Navbar -->
+<nav>
+    <a href="{% url 'accounts:index' %}">
+       {% if request.session.type == 'H' %} 
+          Hospital: {{ request.session.name }}
+       {% elif request.session.type == 'B' %} 
+          Blood Bank: {{ request.session.name }}
+       {% endif %}
+    </a>
+    <ul>
+       {% if request.session.type == 'H' %}
+          <li><a href="{% url 'request:request_blood_supply' %}">Request Blood Supply</a></li>
+          {% if request.session.blood_supply_id == None %}
+             <li><a href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
+          {% else %}
+             <li><a href="{% url 'storage:update_blood_supply' %}">Update Blood Supply</a></li>
+          {% endif %}
+          <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
+       {% elif request.session.type == 'B' %}
+          {% if request.session.blood_supply_id == None %}
+             <li><a href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
+          {% else %}
+             <li><a href="{% url 'storage:update_blood_supply' %}">Update Blood Supply</a></li>
+          {% endif %}
+          <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
+       {% endif %}
+          <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+    </ul>
+ </nav>
+ 
+ <!-- Main -->
 <h1>Update Blood Supply</h1>
-    <form method="POST">
-       {% csrf_token %}
-       {{form.as_p}}
-        <button onclick="{% url 'accounts:index' %}">CANCEL</button>
-        <input type="submit" value="UPDATE"><br>
-    </form>
-    <button type="submit" onclick="location.href='{% url 'storage:delete_blood_supply' %}'">DELETE</button>
-</body>
-</html>
+<form method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">Update</button>
+</form>
+<button type="submit" onclick="location.href='{% url 'storage:delete_blood_supply' %}'">Delete</button>
+{% endblock %}

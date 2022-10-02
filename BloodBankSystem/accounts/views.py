@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 from django.contrib import messages
-from .models import User, Individual, Organization, Donor, Recipient, Hospital, BloodBank
-from .forms import DonorForm, RecipientForm, HospitalForm, BloodBankForm
+from accounts.models import *
+from accounts.forms import *
 
 
 class HomeView(View):
@@ -13,7 +13,20 @@ class HomeView(View):
         if 'username' not in request.session:
             return redirect(reverse('accounts:login'))
         else:
-            return render(request, self.template)
+            user = User.objects.get(username=request.session['username'])
+            if request.session['type'] == 'R':
+                transfusions = Transfusion.objects.filter(recipient=user.user_id).order_by('-transfusion_date')
+                context = {'transfusions': transfusions}
+            elif request.session['type'] == 'H':
+                transfusions = Transfusion.objects.filter(hospital=user.user_id).order_by('-transfusion_date')
+                context = {'transfusions': transfusions}
+            elif request.session['type'] == 'D':
+                donations = Donation.objects.filter(donor=user.user_id).order_by('-donation_date')
+                context = {'donations': donations}
+            elif request.session['type'] == 'B':
+                donations = Donation.objects.filter(blood_bank=user.user_id).order_by('-donation_date')
+                context = {'donations': donations}
+            return render(request, self.template, context)
 
 
 class LoginView(View):
@@ -25,6 +38,7 @@ class LoginView(View):
     def post(self, request):
         username = request.POST.get('username')
         password = request.POST.get('password')
+
         try:
             if User.objects.get(username=username):
                 user = User.objects.get(username=username)
@@ -41,8 +55,10 @@ class LoginView(View):
                         request.session['type'] = org.org_type
                         request.session['blood_supply_id'] = org.blood_supply_id
                     return redirect(reverse('accounts:index'))
+                messages.error(request, 'Password is incorrect.')
         except User.DoesNotExist:
             user = None
+            messages.error(request, 'No such username exist.')
         return render(request, self.template)
 
 

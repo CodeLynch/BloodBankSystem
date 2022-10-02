@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 from django.contrib import messages
-from .forms import *
+from request.forms import *
 
 # Create your views here.
 
@@ -11,8 +11,11 @@ class RequestBloodSupplyView(View):
     template = 'request_blood_supply.html'
 
     def get(self, request):
-        form = RequestBloodSupplyForm
-        return render(request, self.template, {'form': form})
+        if 'username' not in request.session:
+            return redirect(reverse('accounts:login'))
+        else:
+            form = RequestBloodSupplyForm
+            return render(request, self.template, {'form': form})
 
     def post(self, request):
         form = RequestBloodSupplyForm(request.POST)

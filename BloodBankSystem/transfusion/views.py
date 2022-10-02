@@ -11,8 +11,11 @@ class TransfusionView(View):
     template = 'transfusion_index.html'
 
     def get(self, request):
-        form = TransfusionForm()
-        return render(request, self.template, {'form': form})
+        if 'username' not in request.session:
+            return redirect(reverse('accounts:login'))
+        else:
+            form = TransfusionForm()
+            return render(request, self.template, {'form': form})
 
     def post(self, request):
         form = TransfusionForm(request.POST)
@@ -25,7 +28,7 @@ class TransfusionView(View):
             recipient = Recipient.objects.get(username=request.session['username'])
             transfusion.recipient = recipient
             transfusion.save()
-            messages.success(request, 'Transfusion Recorded Successfully!')
+            messages.success(request, 'Transfusion recorded successfully!')
             return redirect(reverse('accounts:index'))
         return render(request, self.template, {'form': form})
 
