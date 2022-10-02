@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
+from django.contrib import messages
 from .models import User, Individual, Organization, Donor, Recipient, Hospital, BloodBank
 from .forms import DonorForm, RecipientForm, HospitalForm, BloodBankForm
-from django.contrib import messages
+
 
 class HomeView(View):
     template = 'index.html'
@@ -48,7 +49,8 @@ class LoginView(View):
 class LogoutView(View):
 
     def get(self, request):
-        request.session.clear()
+        request.session.flush()
+        messages.success(request, 'User was logged out sucessfully.')
         return redirect(reverse('accounts:login'))
 
 
@@ -65,6 +67,7 @@ class DonorRegistrationView(View):
         context = {'form': form}
         if form.is_valid():
             form.save()
+            messages.success(request, 'Donor registered successfully!')
             return redirect(reverse('accounts:login'))
         return render(request, self.template, context)
 
@@ -82,6 +85,7 @@ class RecipientRegistrationView(View):
         context = {'form': form}
         if form.is_valid():
             form.save()
+            messages.success(request, 'Recipient registered successfully!')
             return redirect(reverse('accounts:login'))
         return render(request, self.template, context)
 
@@ -99,6 +103,7 @@ class HospitalRegistrationView(View):
         context = {'form': form}
         if form.is_valid():
             form.save()
+            messages.success(request, 'Hospital registered successfully!')
             return redirect(reverse('accounts:login'))
         return render(request, self.template, context)
 
@@ -116,6 +121,7 @@ class BloodBankRegistrationView(View):
         context = {'form': form}
         if form.is_valid():
             form.save()
+            messages.success(request, 'Blood bank registered successfully!')
             return redirect(reverse('accounts:login'))
         return render(request, self.template, context)
 
@@ -157,7 +163,7 @@ class EditProfileView(View):
             username = request.POST.get('username')
             password = request.POST.get('password')
             form.save()
-            messages.success(request, 'Profile Updated Successfully!')
+            messages.success(request, 'Profile updated successfully!')
             try:
                 if User.objects.get(username=username):
                     user = User.objects.get(username=username)
