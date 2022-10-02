@@ -14,8 +14,7 @@ class User(models.Model):
 
 class Individual(User):
     type_individual = (('D', 'Donor'), ('R', 'Recipient'))
-    type_blood = (('A+', 'A+'), ('B+', 'B+'), ('AB+', 'AB+'), ('O+', 'O+'), ('A-', 'A-'), ('B-', 'B-'),
-                  ('AB-', 'AB-'), ('O-', 'O-'))
+    type_blood = (('A+', 'A+'), ('B+', 'B+'), ('AB+', 'AB+'), ('O+', 'O+'), ('A-', 'A-'), ('B-', 'B-'), ('AB-', 'AB-'), ('O-', 'O-'))
     first_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=50, null=True, blank=True)
     last_name = models.CharField(max_length=50)
@@ -32,14 +31,17 @@ class Individual(User):
 
 class BloodSupply(models.Model):
     supply_id = models.AutoField(primary_key=True)
-    aplus_amount = models.IntegerField(default=0)
-    amin_amount = models.IntegerField(default=0)
-    bplus_amount = models.IntegerField(default=0)
-    bmin_amount = models.IntegerField(default=0)
-    abplus_amount = models.IntegerField(default=0)
-    abmin_amount = models.IntegerField(default=0)
-    oplus_amount = models.IntegerField(default=0)
-    omin_amount = models.IntegerField(default=0)
+    aplus_amount = models.IntegerField(default=0, verbose_name='A+ amount')
+    amin_amount = models.IntegerField(default=0, verbose_name='A- amount')
+    bplus_amount = models.IntegerField(default=0, verbose_name='B+ amount')
+    bmin_amount = models.IntegerField(default=0, verbose_name='B- amount')
+    abplus_amount = models.IntegerField(default=0, verbose_name='AB+ amount')
+    abmin_amount = models.IntegerField(default=0, verbose_name='AB- amount')
+    oplus_amount = models.IntegerField(default=0, verbose_name='O+ amount')
+    omin_amount = models.IntegerField(default=0, verbose_name='O- amount')
+
+    class Meta:
+        verbose_name_plural = 'Blood Supplies'
 
     def __str__(self):
         return '%s' % (self.supply_id)
@@ -70,7 +72,8 @@ class Hospital(Organization):
 
 
 class BloodBank(Organization):
-    pass
+    class Meta:
+        verbose_name_plural = 'Blood Banks'
 
 
 class Donation(models.Model):
@@ -82,6 +85,9 @@ class Donation(models.Model):
     class Meta:
         unique_together = ('donor', 'donation_date')
 
+    def __str__(self):
+        return '%s on %s' % (self.donor, self.donation_date)
+
 
 class Transfusion(models.Model):
     recipient = models.ForeignKey(Recipient, on_delete=models.CASCADE)
@@ -92,10 +98,12 @@ class Transfusion(models.Model):
     class Meta:
         unique_together = ('recipient', 'transfusion_date')
 
+    def __str__(self):
+        return '%s on %s' % (self.recipient, self.transfusion_date)
+
 
 class Request(models.Model):
-    type_blood = (('A+', 'A+'), ('B+', 'B+'), ('AB+', 'AB+'), ('O+', 'O+'), ('A-', 'A-'),
-                  ('B-', 'B-'), ('AB-', 'AB-'), ('O-', 'O-'))
+    type_blood = (('A+', 'A+'), ('B+', 'B+'), ('AB+', 'AB+'), ('O+', 'O+'), ('A-', 'A-'), ('B-', 'B-'), ('AB-', 'AB-'), ('O-', 'O-'))
     id = models.AutoField(primary_key=True)
     request_date = models.DateField()
     blood_type = models.CharField(max_length=3, choices=type_blood)
@@ -104,4 +112,6 @@ class Request(models.Model):
     blood_bank = models.ForeignKey(BloodBank, on_delete=models.CASCADE)
     status = models.BooleanField(default=False)
 
+    def __str__(self):
+        return 'Requested by %s to %s on %s' % (self.hospital, self.blood_bank, self.request_date)
     

@@ -1,13 +1,12 @@
 from pyexpat import model
-from django.forms import ModelForm
 from django import forms
 from .models import *
 
 
-class RequestBloodSupplyForm(ModelForm):
-    blood_type = forms.ChoiceField(widget=forms.Select())
-    request_date = forms.DateField(widget=forms.DateInput)
-    quantity = forms.IntegerField(widget=forms.NumberInput)
+class RequestBloodSupplyForm(forms.ModelForm):
+    blood_type = forms.CharField(widget=forms.Select()),
+    request_date = forms.DateField(widget=forms.DateInput(attrs={'placeholder': 'yyyy-mm-dd'}), error_messages={'invalid': 'Please enter a valid date (yyyy-mm-dd).'})
+    quantity = forms.IntegerField(widget=forms.NumberInput()),
 
     class Meta:
         model = Request

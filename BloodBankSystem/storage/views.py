@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
+from django.contrib import messages
 from .forms import *
 
 
@@ -22,6 +23,7 @@ class CreateBloodSupplyView(View):
             org.blood_supply = new_supply
             org.save(update_fields=["blood_supply"])
             request.session['blood_supply_id'] = org.blood_supply_id
+            messages.success(request, 'Blood supply created successfully!')
             return redirect(reverse('accounts:index'))
         return render(request, self.template, {'form': form})
 
@@ -39,6 +41,7 @@ class UpdateBloodSupplyView(View):
         form = UpdateBloodSupplyForm(request.POST, instance=bloodSupply)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Blood supply updated successfully!')
             return redirect(reverse('accounts:index'))
         return render(request, self.template, {'form': form})
 
