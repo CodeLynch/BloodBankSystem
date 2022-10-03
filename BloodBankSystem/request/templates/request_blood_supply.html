@@ -27,7 +27,6 @@ Request Blood Supply
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <a href="{% url 'accounts:index' %}">Cancel</a>
     <button type="submit">Request</button>
 </form>
 {% endblock %}
