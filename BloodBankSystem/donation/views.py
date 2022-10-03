@@ -1,11 +1,10 @@
-from sqlite3 import IntegrityError
-
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 from django.contrib import messages
 from accounts.models import Donation, BloodBank, Donor, BloodSupply
 from donation.forms import DonationForm
+from django.db import IntegrityError
 
 # Create your views here.
 
@@ -68,11 +67,9 @@ class DonationView(View):
                     blood_supply.omin_amount = initVal + 1
                     blood_supply.save(update_fields=["omin_amount"])
                 #----------------------------------------------
-
                 messages.success(request, 'Donation recorded successfully!')
                 return redirect(reverse('accounts:index'))
-            except Exception as ex:
-                messages.error(request, 'You can only Donate once in a day')
+            except IntegrityError:
+                messages.error(request, 'You can only donate once in a day!')
                 return redirect(reverse('accounts:index'))
         return render(request, self.template, {'form': form})
-
