@@ -2,6 +2,13 @@ from django import forms
 from accounts.models import *
 
 
+cn_error_text = 'Please enter a valid contact number (09XXXXXXXXX).'
+cn_placeholder = '09XXXXXXXXX'
+age_max = 100
+age_min = 0
+weight_max = 100
+weight_min = 0
+
 class DonorForm(forms.ModelForm):
     username = forms.CharField(widget=forms.TextInput())
     password = forms.CharField(widget=forms.PasswordInput())
@@ -9,9 +16,9 @@ class DonorForm(forms.ModelForm):
     first_name = forms.CharField(widget=forms.TextInput())
     middle_name = forms.CharField(widget=forms.TextInput()),
     last_name = forms.CharField(widget=forms.TextInput())
-    contact_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '09XXXXXXXXX'}), error_messages={'invalid': 'Please enter a valid contact number (09XXXXXXXXX).'})
-    age = forms.IntegerField(widget=forms.NumberInput())
-    weight = forms.FloatField(widget=forms.NumberInput()),
+    contact_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': cn_placeholder}), error_messages={'invalid': cn_error_text})
+    age = forms.IntegerField(widget=forms.NumberInput(attrs={'max': age_max, 'min': age_min}))
+    weight = forms.FloatField(widget=forms.NumberInput(attrs={'max': weight_max, 'min': weight_min}), label='Weight (kg)')
     blood_type = forms.CharField(widget=forms.Select()),
     health_condition = forms.CharField(widget=forms.Textarea()),
     individual_type = 'D'
@@ -33,9 +40,9 @@ class RecipientForm(forms.ModelForm):
     first_name = forms.CharField(widget=forms.TextInput())
     middle_name = forms.CharField(widget=forms.TextInput()),
     last_name = forms.CharField(widget=forms.TextInput())
-    contact_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '09XXXXXXXXX'}), error_messages={'invalid': 'Please enter a valid contact number (09XXXXXXXXX).'})
-    age = forms.IntegerField(widget=forms.NumberInput())
-    weight = forms.FloatField(widget=forms.NumberInput()),
+    contact_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': cn_placeholder}), error_messages={'invalid': cn_error_text})
+    age = forms.IntegerField(widget=forms.NumberInput(attrs={'max': age_max, 'min': age_min}))
+    weight = forms.FloatField(widget=forms.NumberInput(attrs={'max': weight_max, 'min': weight_min}))
     blood_type = forms.CharField(widget=forms.Select()),
     health_condition = forms.CharField(widget=forms.Textarea()),
     individual_type = 'R'
@@ -56,7 +63,7 @@ class HospitalForm(forms.ModelForm):
     type = 'O'
     name = forms.CharField(widget=forms.TextInput())
     address = forms.CharField(widget=forms.TextInput())
-    contact_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '09XXXXXXXXX'}), error_messages={'invalid': 'Please enter a valid contact number (09XXXXXXXXX).'})
+    contact_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': cn_placeholder}), error_messages={'invalid': cn_error_text})
     org_type = 'H'
 
     class Meta:
@@ -75,7 +82,7 @@ class BloodBankForm(forms.ModelForm):
     type = 'O'
     name = forms.CharField(widget=forms.TextInput())
     address = forms.CharField(widget=forms.TextInput())
-    contact_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': '09XXXXXXXXX'}), error_messages={'invalid': 'Please enter a valid contact number (09XXXXXXXXX).'})
+    contact_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': cn_placeholder}), error_messages={'invalid': cn_error_text})
     org_type = 'B'
 
     class Meta:

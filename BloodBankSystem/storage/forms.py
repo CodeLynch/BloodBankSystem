@@ -2,16 +2,20 @@ from django import forms
 from .models import *
 
 
+max = 100
+min = 0
+
+
 class BloodSupplyForm(forms.ModelForm):
 
-    aplus_amount = forms.IntegerField(widget=forms.NumberInput),
-    amin_amount = forms.IntegerField(widget=forms.NumberInput),
-    bplus_amount = forms.IntegerField(widget=forms.NumberInput),
-    bmin_amount = forms.IntegerField(widget=forms.NumberInput),
-    abplus_amount = forms.IntegerField(widget=forms.NumberInput),
-    abmin_amount = forms.IntegerField(widget=forms.NumberInput),
-    oplus_amount = forms.IntegerField(widget=forms.NumberInput),
-    omin_amount = forms.IntegerField(widget=forms.NumberInput),
+    aplus_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min}), label='A+ amount')
+    amin_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min}), label='A- amount')
+    bplus_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min}), label='B+ amount')
+    bmin_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min}), label='B- amount')
+    abplus_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min}), label='AB+ amount')
+    abmin_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min}), label='AB- amount')
+    oplus_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min}), label='O+ amount')
+    omin_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min}), label='O- amount')
 
     class Meta:
         model = BloodSupply
