@@ -71,76 +71,39 @@ class LogoutView(View):
         return redirect(reverse('accounts:login'))
 
 
-class DonorRegistrationView(View):
+def RegistrationView(request, type = None):
     template = 'register.html'
-
-    def get(self, request):
-        form = DonorForm()
+    
+    if request.method == 'GET':
+        if type == 'donor':
+            form = DonorForm()
+        elif type == 'recipient':
+            form = RecipientForm()
+        elif type == 'hospital':
+            form = HospitalForm()
+        elif type == 'blood_bank':
+            form = BloodBankForm()
         context = {'form': form}
-        return render(request, self.template, context)
 
-    def post(self, request):
-        form = DonorForm(request.POST)
-        context = {'form': form}
+    if request.method == 'POST':
+        if type == 'donor':
+            form = DonorForm(request.POST)
+            user_type = 'Donor'
+        elif type == 'recipient':
+            form = RecipientForm(request.POST)
+            user_type = 'Recipient'
+        elif type == 'hospital':
+            form = HospitalForm(request.POST)
+            user_type = 'Hospital'
+        elif type == 'blood_bank':
+            form = BloodBankForm(request.POST)
+            user_type = 'Blood bank'
         if form.is_valid():
             form.save()
-            messages.success(request, 'Donor registered successfully!')
+            messages.success(request, user_type + ' registered successfully!')
             return redirect(reverse('accounts:login'))
-        return render(request, self.template, context)
-
-
-class RecipientRegistrationView(View):
-    template = 'register.html'
-
-    def get(self, request):
-        form = RecipientForm()
-        context = {'form': form}
-        return render(request, self.template, context)
-
-    def post(self, request):
-        form = RecipientForm(request.POST)
-        context = {'form': form}
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Recipient registered successfully!')
-            return redirect(reverse('accounts:login'))
-        return render(request, self.template, context)
-
-
-class HospitalRegistrationView(View):
-    template = 'register.html'
-
-    def get(self, request):
-        form = HospitalForm()
-        context = {'form': form}
-        return render(request, self.template, context)
-
-    def post(self, request):
-        form = HospitalForm(request.POST)
-        context = {'form': form}
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Hospital registered successfully!')
-            return redirect(reverse('accounts:login'))
-        return render(request, self.template, context)
-
-
-class BloodBankRegistrationView(View):
-    template = 'register.html'
-
-    def get(self, request):
-        form = BloodBankForm()
-        context = {'form': form}
-        return render(request, self.template, context)
-
-    def post(self, request):
-        form = BloodBankForm(request.POST)
-        context = {'form': form}
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Blood bank registered successfully!')
-            return redirect(reverse('accounts:login'))
-        return render(request, self.template, context)
+            
+    return render(request, template, context)
 
 
 class EditProfileView(View):
