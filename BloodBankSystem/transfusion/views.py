@@ -77,7 +77,6 @@ class TransfusionView(View):
                     messages.error(request, 'Hospital has no O- blood in their supply')
             # update base on blood_type if available--------
             try:
-                transfusion.save()
                 if available:
                     if request.session['blood_type'] == 'A+':
                         initVal = blood_supply.aplus_amount
@@ -112,6 +111,7 @@ class TransfusionView(View):
                         blood_supply.omin_amount = initVal - 1
                         blood_supply.save(update_fields=["omin_amount"])
                 # ----------------------------------------------
+                    transfusion.save()
                     messages.success(request, 'Transfusion recorded successfully!')
                     return redirect(reverse('accounts:index'))
             except IntegrityError:
