@@ -71,7 +71,7 @@ class LogoutView(View):
         return redirect(reverse('accounts:login'))
 
 
-def RegistrationView(request, type = None):
+def registration_view(request, type = None):
     template = 'register.html'
     
     if request.method == 'GET':
