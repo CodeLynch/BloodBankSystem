@@ -21,7 +21,7 @@ class TransfusionView(View):
 
     def post(self, request):
         form = TransfusionForm(request.POST)
-        user_id = request.POST['hospital'].split(":")[0]
+        user_id = request.POST['hospital']
         if form.is_valid():
             # getting the hospital object by its user_id and assigning it to hospital field
             hospital = Hospital.objects.get(user_id=user_id)
@@ -78,6 +78,7 @@ class TransfusionView(View):
             # update base on blood_type if available--------
             try:
                 if available:
+                    transfusion.save()
                     if request.session['blood_type'] == 'A+':
                         initVal = blood_supply.aplus_amount
                         blood_supply.aplus_amount = initVal - 1
@@ -111,7 +112,6 @@ class TransfusionView(View):
                         blood_supply.omin_amount = initVal - 1
                         blood_supply.save(update_fields=["omin_amount"])
                 # ----------------------------------------------
-                    transfusion.save()
                     messages.success(request, 'Transfusion recorded successfully!')
                     return redirect(reverse('accounts:index'))
             except IntegrityError:
