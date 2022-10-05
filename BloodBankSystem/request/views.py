@@ -5,7 +5,18 @@ from django.contrib import messages
 from request.forms import *
 from accounts.models import BloodSupply
 
-# Create your views here.
+
+def is_approved(giver_supply, receiver_supply, field_name, quantity):
+    giver_init_value = getattr(giver_supply, field_name)
+    if giver_init_value >= quantity:
+        receiver_init_value = getattr(receiver_supply, field_name)
+        setattr(giver_supply, field_name, giver_init_value - quantity)
+        setattr(receiver_supply, field_name, receiver_init_value + quantity)
+        giver_supply.save(update_fields=[field_name])
+        receiver_supply.save(update_fields=[field_name])
+        return True
+    else:
+        return False
 
 
 class RequestBloodSupplyView(View):
@@ -17,7 +28,6 @@ class RequestBloodSupplyView(View):
         else:
             form = RequestBloodSupplyForm
             blood_banks = BloodBank.objects.exclude(blood_supply_id=None)
-
             return render(request, self.template, {'form': form, 'blood_banks': blood_banks})
 
     def post(self, request):
@@ -30,113 +40,43 @@ class RequestBloodSupplyView(View):
             requestt = form.save(commit=False)
             requestt.hospital = hospital
             requestt.status = True
-            # get blood supply of hospital and bloodban
+            
+            # get blood supply of hospital and bloodbank
             giver_blood_supply = BloodSupply.objects.get(pk=blood_bank.blood_supply_id)
             receiver_blood_supply = BloodSupply.objects.get(pk=request.session['blood_supply_id'])
             quantity = int(request.POST['quantity'])
-            available = False
-            # check if blood_type is available--------------------
+
+            # update hospital and blood bank supply if available--------
             if request.POST['blood_type'] == 'A+':
-                if giver_blood_supply.aplus_amount >= quantity:
-                    available = True
-                else:
-                    messages.error(request, 'Blood Bank does not have sufficient A+ blood in their supply')
+                approved = is_approved(giver_blood_supply, receiver_blood_supply, 'aplus_amount', quantity)
+                type = 'A+'
             elif request.POST['blood_type'] == 'A-':
-                if giver_blood_supply.amin_amount >= quantity:
-                    available = True
-                else:
-                    messages.error(request, 'Blood Bank does not have sufficient A- blood in their supply')
+                approved = is_approved(giver_blood_supply, receiver_blood_supply, 'amin_amount', quantity)
+                type = 'A-'
             elif request.POST['blood_type'] == 'B+':
-                if giver_blood_supply.bplus_amount >= quantity:
-                    available = True
-                else:
-                    messages.error(request, 'Blood Bank does not have sufficient B+ blood in their supply')
+                approved = is_approved(giver_blood_supply, receiver_blood_supply, 'bplus_amount', quantity)
+                type = 'B+'
             elif request.POST['blood_type'] == 'B-':
-                if giver_blood_supply.bmin_amount >= quantity:
-                    available = True
-                else:
-                    messages.error(request, 'Blood Bank does not have sufficient B- blood in their supply')
+                iapproved = is_approved(giver_blood_supply, receiver_blood_supply, 'bmin_amount', quantity)
+                type = 'B-'
             elif request.POST['blood_type'] == 'AB+':
-                if giver_blood_supply.abplus_amount >= quantity:
-                    available = True
-                else:
-                    messages.error(request, 'Blood Bank does not have sufficient AB+ blood in their supply')
+                approved = is_approved(giver_blood_supply, receiver_blood_supply, 'abplus_amount', quantity)
+                type = 'AB+'
             elif request.POST['blood_type'] == 'AB-':
-                if giver_blood_supply.abmin_amount >= quantity:
-                    available = True
-                else:
-                    messages.error(request, 'Blood Bank does not have sufficient AB- blood in their supply')
+                approved = is_approved(giver_blood_supply, receiver_blood_supply, 'abmin_amount', quantity)
+                type = 'AB-'
             elif request.POST['blood_type'] == 'O+':
-                if giver_blood_supply.oplus_amount >= quantity:
-                    available = True
-                else:
-                    messages.error(request, 'Blood Bank does not have sufficient O+ blood in their supply')
+                approved = is_approved(giver_blood_supply, receiver_blood_supply, 'oplus_amount', quantity)
+                type = 'O+'
             else:
-                if giver_blood_supply.omin_amount >= quantity:
-                    available = True
-                else:
-                    messages.error(request, 'Blood Bank does not have sufficient O- blood in their supply')
-            # ----------------------------------------------
-            # update hospital and blood bank if available--------
-            if available:
-                if request.POST['blood_type'] == 'A+':
-                    initVal = giver_blood_supply.aplus_amount
-                    giver_blood_supply.aplus_amount = initVal - quantity
-                    initVal = receiver_blood_supply.aplus_amount
-                    receiver_blood_supply.aplus_amount = initVal + quantity
-                    giver_blood_supply.save(update_fields=["aplus_amount"])
-                    receiver_blood_supply.save(update_fields=["aplus_amount"])
-                elif request.POST['blood_type'] == 'A-':
-                    initVal = giver_blood_supply.amin_amount
-                    giver_blood_supply.amin_amount = initVal - quantity
-                    initVal = receiver_blood_supply.amin_amount
-                    receiver_blood_supply.amin_amount = initVal + quantity
-                    giver_blood_supply.save(update_fields=["amin_amount"])
-                    receiver_blood_supply.save(update_fields=["amin_amount"])
-                elif request.POST['blood_type'] == 'B+':
-                    initVal = giver_blood_supply.bplus_amount
-                    giver_blood_supply.bplus_amount = initVal - quantity
-                    initVal = receiver_blood_supply.bplus_amount
-                    receiver_blood_supply.bplus_amount = initVal + quantity
-                    giver_blood_supply.save(update_fields=["bplus_amount"])
-                    receiver_blood_supply.save(update_fields=["bplus_amount"])
-                elif request.POST['blood_type'] == 'B-':
-                    initVal = giver_blood_supply.bmin_amount
-                    giver_blood_supply.bmin_amount = initVal - quantity
-                    initVal = receiver_blood_supply.bmin_amount
-                    receiver_blood_supply.bmin_amount = initVal + quantity
-                    giver_blood_supply.save(update_fields=["bmin_amount"])
-                    receiver_blood_supply.save(update_fields=["bmin_amount"])
-                elif request.POST['blood_type'] == 'AB+':
-                    initVal = giver_blood_supply.abplus_amount
-                    giver_blood_supply.abplus_amount = initVal - quantity
-                    initVal = receiver_blood_supply.abplus_amount
-                    receiver_blood_supply.abplus_amount = initVal + quantity
-                    giver_blood_supply.save(update_fields=["abplus_amount"])
-                    receiver_blood_supply.save(update_fields=["abplus_amount"])
-                elif request.POST['blood_type'] == 'AB-':
-                    initVal = giver_blood_supply.abmin_amount
-                    giver_blood_supply.abmin_amount = initVal - quantity
-                    initVal = receiver_blood_supply.abmin_amount
-                    receiver_blood_supply.abmin_amount = initVal + quantity
-                    giver_blood_supply.save(update_fields=["abmin_amount"])
-                    receiver_blood_supply.save(update_fields=["abmin_amount"])
-                elif request.POST['blood_type'] == 'O+':
-                    initVal = giver_blood_supply.oplus_amount
-                    giver_blood_supply.oplus_amount = initVal - quantity
-                    initVal = receiver_blood_supply.oplus_amount
-                    receiver_blood_supply.oplus_amount = initVal + quantity
-                    giver_blood_supply.save(update_fields=["oplus_amount"])
-                    receiver_blood_supply.save(update_fields=["oplus_amount"])
-                else:
-                    initVal = giver_blood_supply.omin_amount
-                    giver_blood_supply.omin_amount = initVal - quantity
-                    initVal = receiver_blood_supply.omin_amount
-                    receiver_blood_supply.omin_amount = initVal + quantity
-                    giver_blood_supply.save(update_fields=["omin_amount"])
-                    receiver_blood_supply.save(update_fields=["omin_amount"])
-                # ----------------------------------------------
-                requestt.save()
+                approved = is_approved(giver_blood_supply, receiver_blood_supply, 'omin_amount', quantity)
+                type = 'O-'
+            # ----------------------------------------------------------
+            
+            if approved:
+                request.save()
                 messages.success(request, 'Blood supply requested successfully!')
-                return redirect(reverse('accounts:index'))
+            else:
+                messages.error(request, 'Blood Bank does not have sufficient ' + type + ' blood in their supply.')
+            return redirect(reverse('accounts:index'))
         return render(request, self.template, {'form': form})

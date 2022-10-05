@@ -6,7 +6,15 @@ from accounts.models import Recipient, Hospital, BloodSupply
 from transfusion.forms import TransfusionForm
 from django.db import IntegrityError
 
-# Create your views here.
+
+def is_approved(blood_supply, field_name):
+    init_value = getattr(blood_supply, field_name)
+    if init_value > 0:
+        setattr(blood_supply, field_name, init_value - 1)
+        blood_supply.save(update_fields=[field_name])
+        return True
+    else:
+        return False
 
 
 class TransfusionView(View):
@@ -29,93 +37,49 @@ class TransfusionView(View):
             transfusion = form.save(commit=False)
             transfusion.hospital = hospital
             transfusion.status = True
+            
             # getting donor object through its username and assigning it to donor field
             recipient = Recipient.objects.get(username=request.session['username'])
             transfusion.recipient = recipient
+            
             # get blood supply of hospital
             blood_supply = BloodSupply.objects.get(pk=hospital.blood_supply_id)
-            available = False
-            #check if blood_type is available--------------------
-            if request.session['blood_type'] == 'A+':
-                if blood_supply.aplus_amount > 0:
-                    available = True
-                else:
-                    messages.error(request, 'Hospital has no A+ blood in their supply')
-            elif request.session['blood_type'] == 'A-':
-                if blood_supply.amin_amount > 0:
-                    available = True
-                else:
-                    messages.error(request, 'Hospital has no A- blood in their supply')
-            elif request.session['blood_type'] == 'B+':
-                if blood_supply.bplus_amount > 0:
-                    available = True
-                else:
-                    messages.error(request, 'Hospital has no B+ blood in their supply')
-            elif request.session['blood_type'] == 'B-':
-                if blood_supply.bmin_amount > 0:
-                    available = True
-                else:
-                    messages.error(request, 'Hospital has no B- blood in their supply')
-            elif request.session['blood_type'] == 'AB+':
-                if blood_supply.abplus_amount > 0:
-                    available = True
-                else:
-                    messages.error(request, 'Hospital has no AB+ blood in their supply')
-            elif request.session['blood_type'] == 'AB-':
-                if blood_supply.abmin_amount > 0:
-                    available = True
-                else:
-                    messages.error(request, 'Hospital has no AB- blood in their supply')
-            elif request.session['blood_type'] == 'O+':
-                if blood_supply.oplus_amount > 0:
-                    available = True
-                else:
-                    messages.error(request, 'Hospital has no O+ blood in their supply')
-            else:
-                if blood_supply.omin_amount > 0:
-                    available = True
-                else:
-                    messages.error(request, 'Hospital has no O- blood in their supply')
+            
             # update base on blood_type if available--------
+            if request.session['blood_type'] == 'A+':
+                approved = is_approved(blood_supply, 'aplus_amount')
+                type = 'A+'
+            elif request.session['blood_type'] == 'A-':
+                approved = is_approved(blood_supply, 'amin_amount')
+                type = 'A-'
+            elif request.session['blood_type'] == 'B+':
+                approved = is_approved(blood_supply, 'bplus_amount')
+                type = 'B+'
+            elif request.session['blood_type'] == 'B-':
+                approved = is_approved(blood_supply, 'bmin_amount')
+                type = 'B-'
+            elif request.session['blood_type'] == 'AB+':
+                approved = is_approved(blood_supply, 'abplus_amount')
+                type = 'AB+'
+            elif request.session['blood_type'] == 'AB-':
+                approved = is_approved(blood_supply, 'abmin_amount')
+                type = 'AB-'
+            elif request.session['blood_type'] == 'O+':
+                approved = is_approved(blood_supply, 'oplus_amount')
+                type = 'O+'
+            else:
+                approved = is_approved(blood_supply, 'omin_amount')
+                type = 'O-'
+            # ----------------------------------------------
+
             try:
-                if available:
+                if approved:
                     transfusion.save()
-                    if request.session['blood_type'] == 'A+':
-                        initVal = blood_supply.aplus_amount
-                        blood_supply.aplus_amount = initVal - 1
-                        blood_supply.save(update_fields=["aplus_amount"])
-                    elif request.session['blood_type'] == 'A-':
-                        initVal = blood_supply.amin_amount
-                        blood_supply.amin_amount = initVal - 1
-                        blood_supply.save(update_fields=["amin_amount"])
-                    elif request.session['blood_type'] == 'B+':
-                        initVal = blood_supply.bplus_amount
-                        blood_supply.bplus_amount = initVal - 1
-                        blood_supply.save(update_fields=["bplus_amount"])
-                    elif request.session['blood_type'] == 'B-':
-                        initVal = blood_supply.bmin_amount
-                        blood_supply.bmin_amount = initVal - 1
-                        blood_supply.save(update_fields=["bmin_amount"])
-                    elif request.session['blood_type'] == 'AB+':
-                        initVal = blood_supply.abplus_amount
-                        blood_supply.abplus_amount = initVal - 1
-                        blood_supply.save(update_fields=["abplus_amount"])
-                    elif request.session['blood_type'] == 'AB-':
-                        initVal = blood_supply.abmin_amount
-                        blood_supply.abmin_amount = initVal - 1
-                        blood_supply.save(update_fields=["abmin_amount"])
-                    elif request.session['blood_type'] == 'O+':
-                        initVal = blood_supply.oplus_amount
-                        blood_supply.oplus_amount = initVal - 1
-                        blood_supply.save(update_fields=["oplus_amount"])
-                    else:
-                        initVal = blood_supply.omin_amount
-                        blood_supply.omin_amount = initVal - 1
-                        blood_supply.save(update_fields=["omin_amount"])
-                # ----------------------------------------------
                     messages.success(request, 'Transfusion recorded successfully!')
-                    return redirect(reverse('accounts:index'))
+                else:
+                    messages.error(request, 'Hospital has no ' + type + ' blood in their supply.')
+                return redirect(reverse('accounts:index'))
             except IntegrityError:
-                messages.error(request, "You can only receive transfusion once in a day")
+                messages.error(request, "You can only receive transfusion once in a day.")
                 return redirect(reverse('accounts:index'))
         return render(request, self.template, {'form': form})

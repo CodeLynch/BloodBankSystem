@@ -6,7 +6,12 @@ from accounts.models import Donation, BloodBank, Donor, BloodSupply
 from donation.forms import DonationForm
 from django.db import IntegrityError
 
-# Create your views here.
+
+def is_approved(blood_supply, field_name):
+    init_value = getattr(blood_supply, field_name)
+    setattr(blood_supply, field_name, init_value + 1)
+    blood_supply.save(update_fields=[field_name])
+    return True
 
 
 class DonationView(View):
@@ -27,50 +32,39 @@ class DonationView(View):
                 donation = form.save(commit=False)
                 donation.blood_bank = blood_bank
                 donation.status = True
+                
                 # getting donor object through its username and assigning it to donor field
                 donor = Donor.objects.get(username=request.session['username'])
                 donation.donor = donor
                 donation.save()
+                
                 # update blood supply of blood bank
-
                 blood_supply = BloodSupply.objects.get(pk=blood_bank.blood_supply_id)
+
                 # update base on blood_type--------------------
                 if request.session['blood_type'] == 'A+':
-                    initVal = blood_supply.aplus_amount
-                    blood_supply.aplus_amount = initVal + 1
-                    blood_supply.save(update_fields=["aplus_amount"])
+                    approved = is_approved(blood_supply, 'aplus_amount')
                 elif request.session['blood_type'] == 'A-':
-                    initVal = blood_supply.amin_amount
-                    blood_supply.amin_amount = initVal + 1
-                    blood_supply.save(update_fields=["amin_amount"])
+                    approved = is_approved(blood_supply, 'amin_amount')
                 elif request.session['blood_type'] == 'B+':
-                    initVal = blood_supply.bplus_amount
-                    blood_supply.bplus_amount = initVal + 1
-                    blood_supply.save(update_fields=["bplus_amount"])
+                    approved = is_approved(blood_supply, 'bplus_amount')
                 elif request.session['blood_type'] == 'B-':
-                    initVal = blood_supply.bmin_amount
-                    blood_supply.bmin_amount = initVal + 1
-                    blood_supply.save(update_fields=["bmin_amount"])
+                    approved = is_approved(blood_supply, 'bmin_amount')
                 elif request.session['blood_type'] == 'AB+':
-                    initVal = blood_supply.abplus_amount
-                    blood_supply.abplus_amount = initVal + 1
-                    blood_supply.save(update_fields=["abplus_amount"])
+                    approved = is_approved(blood_supply, 'abplus_amount')
                 elif request.session['blood_type'] == 'AB-':
-                    initVal = blood_supply.abmin_amount
-                    blood_supply.abmin_amount = initVal + 1
-                    blood_supply.save(update_fields=["abmin_amount"])
+                    approved = is_approved(blood_supply, 'abmin_amount')
                 elif request.session['blood_type'] == 'O+':
-                    initVal = blood_supply.oplus_amount
-                    blood_supply.oplus_amount = initVal + 1
-                    blood_supply.save(update_fields=["oplus_amount"])
+                    approved = is_approved(blood_supply, 'oplus_amount')
                 else:
-                    initVal = blood_supply.omin_amount
-                    blood_supply.omin_amount = initVal + 1
-                    blood_supply.save(update_fields=["omin_amount"])
+                    approved = is_approved(blood_supply, 'omin_amount')
                 #----------------------------------------------
-                messages.success(request, 'Donation recorded successfully!')
-                return redirect(reverse('accounts:index'))
+                
+                if approved:
+                    messages.success(request, 'Donation recorded successfully!')
+                    return redirect(reverse('accounts:index'))
             except IntegrityError:
-                messages.error(request, 'You can only donate once in a day!')
+                messages.error(request, 'You can only donate once in a day.')
                 return redirect(reverse('accounts:index'))
         return render(request, self.template, {'form': form})
+
