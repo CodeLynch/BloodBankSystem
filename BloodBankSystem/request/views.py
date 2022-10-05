@@ -57,7 +57,7 @@ class RequestBloodSupplyView(View):
                 approved = is_approved(giver_blood_supply, receiver_blood_supply, 'bplus_amount', quantity)
                 type = 'B+'
             elif request.POST['blood_type'] == 'B-':
-                iapproved = is_approved(giver_blood_supply, receiver_blood_supply, 'bmin_amount', quantity)
+                approved = is_approved(giver_blood_supply, receiver_blood_supply, 'bmin_amount', quantity)
                 type = 'B-'
             elif request.POST['blood_type'] == 'AB+':
                 approved = is_approved(giver_blood_supply, receiver_blood_supply, 'abplus_amount', quantity)
@@ -73,8 +73,9 @@ class RequestBloodSupplyView(View):
                 type = 'O-'
             # ----------------------------------------------------------
             
+            
             if approved:
-                request.save()
+                requestt.save()
                 messages.success(request, 'Blood supply requested successfully!')
             else:
                 messages.error(request, 'Blood Bank does not have sufficient ' + type + ' blood in their supply.')
