@@ -19,6 +19,32 @@ Add Transfusion
 
 <!-- Main -->
 <h1>Add Transfusion</h1>
+ <table style="width:50%" border="5">
+            <tr>
+               <th>Hospitals</th>
+               <th>A+ amount</th>
+               <th>A- amount</th>
+                <th>B+ amount</th>
+               <th>B- amount</th>
+                <th>AB+ amount</th>
+               <th>AB- amount</th>
+                <th>O+ amount</th>
+               <th>O- amount</th>
+            </tr>
+            {% for h in hospitals %}
+               <tr>
+                  <td>{{ h.name }}</td>
+                  <td>{{ h.blood_supply.aplus_amount }}</td>
+                   <td>{{ h.blood_supply.amin_amount }}</td>
+                   <td>{{ h.blood_supply.bplus_amount }}</td>
+                   <td>{{ h.blood_supply.bmin_amount }}</td>
+                   <td>{{ h.blood_supply.abplus_amount }}</td>
+                   <td>{{ h.blood_supply.abmin_amount }}</td>
+                   <td>{{ h.blood_supply.oplus_amount }}</td>
+                   <td>{{ h.blood_supply.omin_amount }}</td>
+               </tr>
+            {% endfor %}
+      </table>
 <form method="post">
 {% csrf_token %}
 {{form.as_p}}

@@ -19,6 +19,32 @@ Add Donation
 
 <!-- Main -->
 <h1>Add Donation</h1>
+ <table style="width:50%" border="5">
+            <tr>
+               <th>Blood Bank</th>
+               <th>A+ amount</th>
+               <th>A- amount</th>
+                <th>B+ amount</th>
+               <th>B- amount</th>
+                <th>AB+ amount</th>
+               <th>AB- amount</th>
+                <th>O+ amount</th>
+               <th>O- amount</th>
+            </tr>
+            {% for bank in blood_banks %}
+               <tr>
+                  <td>{{ bank.name }}</td>
+                  <td>{{ bank.blood_supply.aplus_amount }}</td>
+                   <td>{{ bank.blood_supply.amin_amount }}</td>
+                   <td>{{ bank.blood_supply.bplus_amount }}</td>
+                   <td>{{ bank.blood_supply.bmin_amount }}</td>
+                   <td>{{ bank.blood_supply.abplus_amount }}</td>
+                   <td>{{ bank.blood_supply.abmin_amount }}</td>
+                   <td>{{ bank.blood_supply.oplus_amount }}</td>
+                   <td>{{ bank.blood_supply.omin_amount }}</td>
+               </tr>
+            {% endfor %}
+      </table>
 <form method="post">
     {% csrf_token %}
     {{form.as_p}}

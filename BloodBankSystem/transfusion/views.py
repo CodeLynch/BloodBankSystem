@@ -17,7 +17,8 @@ class TransfusionView(View):
             return redirect(reverse('accounts:login'))
         else:
             form = TransfusionForm()
-            return render(request, self.template, {'form': form})
+            hospitals = Hospital.objects.exclude(blood_supply_id=None)
+            return render(request, self.template, {'form': form, 'hospitals': hospitals})
 
     def post(self, request):
         form = TransfusionForm(request.POST)
