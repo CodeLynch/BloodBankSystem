@@ -73,7 +73,8 @@ class LogoutView(View):
 
 def registration_view(request, type = None):
     template = 'register.html'
-    
+    context = ''
+
     if request.method == 'GET':
         if type == 'donor':
             form = DonorForm()
