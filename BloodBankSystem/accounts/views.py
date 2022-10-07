@@ -83,18 +83,15 @@ class LogoutView(View):
 
 def registration_view(request, type = None):
     template = 'register.html'
-    context = ''
 
-    if request.method == 'GET':
-        if type == 'donor':
-            form = DonorForm()
-        elif type == 'recipient':
-            form = RecipientForm()
-        elif type == 'hospital':
-            form = HospitalForm()
-        elif type == 'blood_bank':
-            form = BloodBankForm()
-        context = {'form': form}
+    if type == 'donor':
+        form = DonorForm()
+    elif type == 'recipient':
+        form = RecipientForm()
+    elif type == 'hospital':
+        form = HospitalForm()
+    elif type == 'blood_bank':
+        form = BloodBankForm()
 
     if request.method == 'POST':
         if type == 'donor':
@@ -113,7 +110,8 @@ def registration_view(request, type = None):
             form.save()
             messages.success(request, user_type + ' registered successfully!')
             return redirect(reverse('accounts:login'))
-            
+    
+    context = {'form': form}
     return render(request, template, context)
 
 
