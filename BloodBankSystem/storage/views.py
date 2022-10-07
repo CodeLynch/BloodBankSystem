@@ -84,7 +84,7 @@ class DeleteBloodSupplyView(View):
             return redirect(reverse('accounts:index'))
 
 
-def updateDonation(request, id):
+def update_donation(request, id):
     if request.method == 'POST':
         if 'A' in request.POST:
             donation = Donation.objects.get(pk=id)
@@ -123,7 +123,7 @@ def updateDonation(request, id):
     return redirect(reverse('accounts:index'))
 
 
-def updateRequest(request, id):
+def update_request(request, id):
     if request.method == 'POST':
         if 'A' in request.POST:
             request_o = Request.objects.get(pk=id)
