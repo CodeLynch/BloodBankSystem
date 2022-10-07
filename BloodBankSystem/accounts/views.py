@@ -24,8 +24,8 @@ class HomeView(View):
             elif request.session['type'] == 'D':
                 lists = Donation.objects.filter(donor=user.user_id).order_by('-donation_date')
             elif request.session['type'] == 'B':
-                lists = Donation.objects.filter(blood_bank=user.user_id).order_by('-donation_date')
-                requests = Request.objects.filter(blood_bank=user.user_id).order_by('-request_date')
+                lists = Donation.objects.filter(blood_bank=user.user_id, status="pending").order_by('-donation_date')
+                requests = Request.objects.filter(blood_bank=user.user_id, status="pending").order_by('-request_date')
                 
             lists_paginator = Paginator(lists, 5)
             lists_page_number = request.GET.get('lists_page')
