@@ -3,7 +3,7 @@
         Hospital: {{ request.session.name }}
     </a>
     <ul>
-        <li><a href="{% url 'accounts:index' %}">Requests</a></li>
+        <li><a href="{% url 'accounts:index' %}">Pending Requests and Donations</a></li>
         {% if request.session.blood_supply_id == None %}
             <li><a href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
         {% else %}
@@ -49,7 +49,7 @@
         {% endif %}
     </ul>
 {% else %}
-    <p>No transfusions made.</p>
+    <p>No pending transfusions.</p>
 {% endif %}
 
 {% if requests %}
@@ -89,6 +89,6 @@
         {% endif %}
     </ul>
 {% else %}
-    <p>No requests made.</p>
+    <p>No pending requests.</p>
 {% endif %}
 </main>
