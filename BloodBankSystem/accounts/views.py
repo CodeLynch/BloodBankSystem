@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 from django.contrib import messages
+from django.core.paginator import Paginator
 from accounts.models import *
 from accounts.forms import *
 
@@ -13,19 +14,28 @@ class HomeView(View):
         if 'username' not in request.session:
             return redirect(reverse('accounts:login'))
         else:
+            requests = ''
             user = User.objects.get(username=request.session['username'])
             if request.session['type'] == 'R':
-                transfusions = Transfusion.objects.filter(recipient=user.user_id).order_by('-transfusion_date')
-                context = {'transfusions': transfusions}
+                lists = Transfusion.objects.filter(recipient=user.user_id).order_by('-transfusion_date')
             elif request.session['type'] == 'H':
-                transfusions = Transfusion.objects.filter(hospital=user.user_id).order_by('-transfusion_date')
-                context = {'transfusions': transfusions}
+                lists = Transfusion.objects.filter(hospital=user.user_id).order_by('-transfusion_date')
+                requests = Request.objects.filter(hospital=user.user_id).order_by('-request_date')
             elif request.session['type'] == 'D':
-                donations = Donation.objects.filter(donor=user.user_id).order_by('-donation_date')
-                context = {'donations': donations}
+                lists = Donation.objects.filter(donor=user.user_id).order_by('-donation_date')
             elif request.session['type'] == 'B':
-                donations = Donation.objects.filter(blood_bank=user.user_id).order_by('-donation_date')
-                context = {'donations': donations}
+                lists = Donation.objects.filter(blood_bank=user.user_id).order_by('-donation_date')
+                requests = Request.objects.filter(blood_bank=user.user_id).order_by('-request_date')
+                
+            lists_paginator = Paginator(lists, 5)
+            lists_page_number = request.GET.get('lists_page')
+            lists = lists_paginator.get_page(lists_page_number)
+            
+            requests_paginator = Paginator(requests, 5)
+            requests_page_number = request.GET.get('requests_page')
+            requests = requests_paginator.get_page(requests_page_number)
+
+            context = {'lists': lists, 'requests': requests}
             return render(request, self.template, context)
 
 

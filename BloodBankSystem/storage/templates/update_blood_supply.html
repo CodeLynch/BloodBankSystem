@@ -15,23 +15,24 @@ Update Blood Supply
        {% endif %}
     </a>
     <ul>
-       {% if request.session.type == 'H' %}
-          {% if request.session.blood_supply_id == None %}
-             <li><a href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
-          {% else %}
-             <li><a href="{% url 'request:request_blood_supply' %}">Request Blood Supply</a></li>
-             <li><a href="{% url 'storage:update_blood_supply' %}">Update Blood Supply</a></li>
-          {% endif %}
-          <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
-       {% elif request.session.type == 'B' %}
-          {% if request.session.blood_supply_id == None %}
-             <li><a href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
-          {% else %}
-             <li><a href="{% url 'storage:update_blood_supply' %}">Update Blood Supply</a></li>
-          {% endif %}
-          <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
-       {% endif %}
-          <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+      <li><a href="{% url 'accounts:index' %}">Requests</a></li>
+      {% if request.session.type == 'H' %}
+         {% if request.session.blood_supply_id == None %}
+            <li><a href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
+         {% else %}
+            <li><a href="{% url 'request:request_blood_supply' %}">Request Blood Supply</a></li>
+            <li><a href="{% url 'storage:update_blood_supply' %}">Update Blood Supply</a></li>
+         {% endif %}
+         <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
+      {% elif request.session.type == 'B' %}
+         {% if request.session.blood_supply_id == None %}
+            <li><a href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
+         {% else %}
+            <li><a href="{% url 'storage:update_blood_supply' %}">Update Blood Supply</a></li>
+         {% endif %}
+         <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
+      {% endif %}
+      <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
     </ul>
  </nav>
  

@@ -15,6 +15,7 @@ Create Blood Supply
       {% endif %}
    </a>
    <ul>
+      <li><a href="{% url 'accounts:index' %}">Requests</a></li>
       {% if request.session.type == 'H' %}
          {% if request.session.blood_supply_id == None %}
             <li><a href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
@@ -31,7 +32,7 @@ Create Blood Supply
          {% endif %}
          <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
       {% endif %}
-         <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+      <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
    </ul>
 </nav>
 

@@ -1,0 +1,49 @@
+<nav>
+    <a href="{% url 'accounts:index' %}">
+        Recipient: {{ request.session.first_name }} {{ request.session.last_name }}
+    </a>
+    <ul>
+        <li><a href="{% url 'accounts:index' %}">Transfusions</a></li>
+        <li><a href="{% url 'transfusion:index' %}">Add Transfusion</a></li>
+        <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
+        <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+    </ul>
+</nav>
+
+<main>
+{% if transfusions %}
+    <!-- Transfusions Table -->
+    <h2>Transfusions</h2>
+    <table style="width:50%">
+        <thead>
+            <tr>
+                <th>Hospital</th>
+                <th>Transfusion Date</th>
+                <th>Status</th>
+            </tr>     
+        </thead>
+        <tbody>
+            {% for transfusion in transfusions %}
+                <tr>
+                    <td>{{ transfusion.hospital }}</td>
+                    <td>{{ transfusion.transfusion_date }}</td>
+                    <td>{{ transfusion.status }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <!-- Pagination -->
+    <ul>
+        {% if transfusions.has_previous %}
+           <li><a href="?lists_page=1">&laquo;</a></li>
+           <li><a href="?lists_page={{ transfusions.previous_page_number }}">Prev</a></li>
+        {% endif %}
+        {% if transfusions.has_next %}
+           <li><a href="?lists_page={{ transfusions.next_page_number }}">Next</a></li>
+           <li><a href="?lists_page={{ transfusions.paginator.num_pages }}">&raquo;</a></li>
+        {% endif %}
+     </ul>
+{% else %}
+    <p>No transfusions made.</p>
+{% endif %}
+</main>
