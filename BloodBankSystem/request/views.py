@@ -32,7 +32,7 @@ class RequestBloodSupplyView(View):
 
     def post(self, request):
         form = RequestBloodSupplyForm(request.POST)
-        blood_bank_id = request.POST['blood_bank'].split(":")[0]
+        blood_bank_id = request.POST['blood_bank']
         blood_bank = BloodBank.objects.get(pk=blood_bank_id)
         if form.is_valid():
             # get hospital object of current user and assign to hospital field
