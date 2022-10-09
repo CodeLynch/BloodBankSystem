@@ -77,10 +77,11 @@ class BloodBank(Organization):
 
 
 class Donation(models.Model):
+    status_choices = (('Pending','Pending'),('Accepted','Accepted'),('Declined','Declined'))
     donor = models.ForeignKey(Donor, on_delete=models.CASCADE)
     blood_bank = models.ForeignKey(BloodBank, on_delete=models.CASCADE)
     donation_date = models.DateField()
-    status = models.BooleanField(default=False)
+    status = models.CharField(max_length=10, choices=status_choices)
 
     class Meta:
         unique_together = ('donor', 'donation_date')
@@ -90,10 +91,11 @@ class Donation(models.Model):
 
 
 class Transfusion(models.Model):
+    status_choices = (('Pending', 'Pending'), ('Accepted', 'Accepted'), ('Declined', 'Declined'))
     recipient = models.ForeignKey(Recipient, on_delete=models.CASCADE)
     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)
     transfusion_date = models.DateField()
-    status = models.BooleanField(default=False)
+    status = models.CharField(max_length=10, choices=status_choices)
 
     class Meta:
         unique_together = ('recipient', 'transfusion_date')
@@ -103,6 +105,7 @@ class Transfusion(models.Model):
 
 
 class Request(models.Model):
+    status_choices = (('Pending', 'Pending'), ('Accepted', 'Accepted'), ('Declined', 'Declined'))
     type_blood = (('A+', 'A+'), ('B+', 'B+'), ('AB+', 'AB+'), ('O+', 'O+'), ('A-', 'A-'), ('B-', 'B-'), ('AB-', 'AB-'), ('O-', 'O-'))
     id = models.AutoField(primary_key=True)
     request_date = models.DateField()
@@ -110,7 +113,7 @@ class Request(models.Model):
     quantity = models.IntegerField(default=0)
     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)
     blood_bank = models.ForeignKey(BloodBank, on_delete=models.CASCADE)
-    status = models.BooleanField(default=False)
+    status = models.CharField(max_length=10, choices=status_choices)
 
     def __str__(self):
         return 'Requested by %s to %s on %s' % (self.hospital, self.blood_bank, self.request_date)
