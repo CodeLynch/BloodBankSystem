@@ -19,8 +19,8 @@ class HomeView(View):
             if request.session['type'] == 'R':
                 lists = Transfusion.objects.filter(recipient=user.user_id).order_by('-transfusion_date')
             elif request.session['type'] == 'H':
-                lists = Transfusion.objects.filter(hospital=user.user_id).order_by('-transfusion_date')
-                requests = Request.objects.filter(hospital=user.user_id).order_by('-request_date')
+                lists = Transfusion.objects.filter(hospital=user.user_id, status='pending').order_by('-transfusion_date')
+                requests = Request.objects.filter(hospital=user.user_id, status='pending').order_by('-request_date')
             elif request.session['type'] == 'D':
                 lists = Donation.objects.filter(donor=user.user_id).order_by('-donation_date')
             elif request.session['type'] == 'B':

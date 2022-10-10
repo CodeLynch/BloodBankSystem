@@ -17,7 +17,7 @@ class DonationView(View):
 
     def post(self, request):
         form = DonationForm(request.POST)
-        user_id = request.POST['blood_bank'].split(":")[0]
+        user_id = request.POST['blood_bank']
         if form.is_valid():
             # getting the blood bank object by its user_id and assigning it to blood_bank field
             try:
