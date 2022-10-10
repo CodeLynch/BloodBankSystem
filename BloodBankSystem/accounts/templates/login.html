@@ -5,25 +5,44 @@ Login
 {% endblock %}
 
 {% block content %}
-<h1>Login</h1>
-<form method="post">
-    {% csrf_token %}
-    <label for="username">Username</label>
-    <input type="text" name="username" id="username" placeholder="Enter username">
-    <label for="username">Password</label>
-    <input type="password" name="password" id="password" placeholder="Enter password">
-    <button type="submit">Login</button>
-</form>
-<span>Don't have an account?</span>
-<div>
-    Register as: 
-    <a href="{% url 'accounts:register' 'donor' %}">Donor</a> |
-    <a href="{% url 'accounts:register' 'recipient' %}">Recipient</a>
-</div>
-<span>or</span>
-<div>
-    Register your organization: 
-    <a href="{% url 'accounts:register' 'hospital' %}">Hospital</a> |
-    <a href="{% url 'accounts:register' 'blood_bank' %}">Blood Bank</a>
-</div>
+<main class="container">
+    <div class="row d-flex justify-content-center align-items-center" style="height: 100vh;">
+        {% load static %}
+        <div class="col-md-8">
+            <h1 class="display-3">
+                A single drop for <br>
+                <span class="text-primary display-2">someone's heartbeat</span>
+            </h1>
+            <p class="lead mt-4">
+                Have all your blood bank transactions in one place.
+            </p>
+        </div>
+        <div class="col-md-4">
+            <div class="shadow rounded px-5 py-5">
+                <h1 class="mb-3">Login</h1>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mt-2">
+                        <label for="username">Username</label>
+                        <input type="text" name="username" id="username" placeholder="Enter username" class="form-control">
+                    </div>
+                    <div class="mt-2">
+                        <label for="username">Password</label>
+                        <input type="password" name="password" id="password" placeholder="Enter password" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-primary form-control mt-4">Login</button>
+                </form>
+
+                
+                <div class="text-center">
+                    <div class="mt-5 mb-2">Don't have an account? Register as: </div>
+                    <a href="{% url 'accounts:register' 'donor' %}">Donor</a> |
+                    <a href="{% url 'accounts:register' 'recipient' %}">Recipient</a> |
+                    <a href="{% url 'accounts:register' 'hospital' %}">Hospital</a> |
+                    <a href="{% url 'accounts:register' 'blood_bank' %}">Blood Bank</a>
+                </div>
+            </div>           
+        </div>
+    </div>
+</main>
 {% endblock %}
