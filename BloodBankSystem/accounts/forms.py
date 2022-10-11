@@ -10,22 +10,31 @@ weight_max = 100
 weight_min = 0
 
 class DonorForm(forms.ModelForm):
-    username = forms.CharField(widget=forms.TextInput())
-    password = forms.CharField(widget=forms.PasswordInput())
     type = 'I'
-    first_name = forms.CharField(widget=forms.TextInput())
-    middle_name = forms.CharField(widget=forms.TextInput()),
-    last_name = forms.CharField(widget=forms.TextInput())
-    contact_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': cn_placeholder}), error_messages={'invalid': cn_error_text})
-    age = forms.IntegerField(widget=forms.NumberInput(attrs={'max': age_max, 'min': age_min}))
-    weight = forms.FloatField(widget=forms.NumberInput(attrs={'max': weight_max, 'min': weight_min}), label='Weight (kg)')
-    blood_type = forms.CharField(widget=forms.Select()),
-    health_condition = forms.CharField(widget=forms.Textarea()),
     individual_type = 'D'
 
     class Meta:
         model = Donor
         fields = ('username', 'password', 'first_name', 'middle_name', 'last_name', 'contact_number', 'age', 'weight', 'blood_type', 'health_condition')
+
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'password': forms.PasswordInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'middle_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'contact_number': forms.TextInput(attrs={'placeholder': cn_placeholder, 'class': 'form-control'}),
+            'age': forms.NumberInput(attrs={'max': weight_max, 'min': weight_min, 'class': 'form-control'}),
+            'weight': forms.NumberInput(attrs={'max': weight_max, 'min': weight_min, 'class': 'form-control'}),
+            'blood_type': forms.Select(attrs={'class': 'form-control'}),
+            'health_condition': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+        }
+
+        error_messages = {
+            'contact_number': {
+                'invalid': cn_error_text,
+            },
+        }
 
     def __init__(self, *args, **kwargs):
         super(DonorForm, self).__init__(*args, **kwargs)
@@ -34,22 +43,31 @@ class DonorForm(forms.ModelForm):
 
 
 class RecipientForm(forms.ModelForm):
-    username = forms.CharField(widget=forms.TextInput())
-    password = forms.CharField(widget=forms.PasswordInput())
     type = 'I'
-    first_name = forms.CharField(widget=forms.TextInput())
-    middle_name = forms.CharField(widget=forms.TextInput()),
-    last_name = forms.CharField(widget=forms.TextInput())
-    contact_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': cn_placeholder}), error_messages={'invalid': cn_error_text})
-    age = forms.IntegerField(widget=forms.NumberInput(attrs={'max': age_max, 'min': age_min}))
-    weight = forms.FloatField(widget=forms.NumberInput(attrs={'max': weight_max, 'min': weight_min}))
-    blood_type = forms.CharField(widget=forms.Select()),
-    health_condition = forms.CharField(widget=forms.Textarea()),
     individual_type = 'R'
 
     class Meta:
         model = Recipient
         fields = ('username', 'password', 'first_name', 'middle_name', 'last_name', 'contact_number', 'age', 'weight', 'blood_type', 'health_condition')
+
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'password': forms.PasswordInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'middle_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'contact_number': forms.TextInput(attrs={'placeholder': cn_placeholder, 'class': 'form-control'}),
+            'age': forms.NumberInput(attrs={'max': weight_max, 'min': weight_min, 'class': 'form-control'}),
+            'weight': forms.NumberInput(attrs={'max': weight_max, 'min': weight_min, 'class': 'form-control'}),
+            'blood_type': forms.Select(attrs={'class': 'form-control'}),
+            'health_condition': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+        }
+        
+        error_messages = {
+            'contact_number': {
+                'invalid': cn_error_text,
+            },
+        }
 
     def __init__(self, *args, **kwargs):
         super(RecipientForm, self).__init__(*args, **kwargs)
@@ -58,17 +76,27 @@ class RecipientForm(forms.ModelForm):
 
 
 class HospitalForm(forms.ModelForm):
-    username = forms.CharField(widget=forms.TextInput())
-    password = forms.CharField(widget=forms.PasswordInput())
     type = 'O'
-    name = forms.CharField(widget=forms.TextInput())
-    address = forms.CharField(widget=forms.TextInput())
-    contact_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': cn_placeholder}), error_messages={'invalid': cn_error_text})
     org_type = 'H'
 
     class Meta:
         model = Hospital
-        fields = ['username', 'password', 'name', 'address', 'contact_number']
+        fields = ('username', 'password', 'name', 'address', 'contact_number')
+
+        widgets = {
+            'user_image': forms.FileInput(attrs={'class': 'form-control'}),
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'password': forms.PasswordInput(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
+            'contact_number': forms.TextInput(attrs={'placeholder': cn_placeholder, 'class': 'form-control'}),
+        }
+
+        error_messages = {
+            'contact_number': {
+                'invalid': cn_error_text,
+            },
+        }
 
     def __init__(self, *args, **kwargs):
         super(HospitalForm, self).__init__(*args, **kwargs)
@@ -77,17 +105,27 @@ class HospitalForm(forms.ModelForm):
 
 
 class BloodBankForm(forms.ModelForm):
-    username = forms.CharField(widget=forms.TextInput())
-    password = forms.CharField(widget=forms.PasswordInput())
     type = 'O'
-    name = forms.CharField(widget=forms.TextInput())
-    address = forms.CharField(widget=forms.TextInput())
-    contact_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': cn_placeholder}), error_messages={'invalid': cn_error_text})
     org_type = 'B'
 
     class Meta:
         model = BloodBank
-        fields = ['username', 'password', 'name', 'address', 'contact_number']
+        fields = ('username', 'password', 'name', 'address', 'contact_number')
+
+        widgets = {
+            'user_image': forms.FileInput(attrs={'class': 'form-control'}),
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'password': forms.PasswordInput(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
+            'contact_number': forms.TextInput(attrs={'placeholder': cn_placeholder, 'class': 'form-control'}),
+        }
+
+        error_messages = {
+            'contact_number': {
+                'invalid': cn_error_text,
+            },
+        }
 
     def __init__(self, *args, **kwargs):
         super(BloodBankForm, self).__init__(*args, **kwargs)
