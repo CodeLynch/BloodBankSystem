@@ -77,11 +77,11 @@ class HospitalForm(forms.ModelForm):
 
 
 class BloodBankForm(forms.ModelForm):
-    username = forms.CharField(widget=forms.TextInput())
-    password = forms.CharField(widget=forms.PasswordInput())
+    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     type = 'O'
-    name = forms.CharField(widget=forms.TextInput())
-    address = forms.CharField(widget=forms.TextInput())
+    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    address = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     contact_number = forms.CharField(widget=forms.TextInput(attrs={'placeholder': cn_placeholder}), error_messages={'invalid': cn_error_text})
     org_type = 'B'
 
