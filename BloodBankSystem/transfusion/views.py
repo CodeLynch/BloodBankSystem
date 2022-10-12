@@ -2,19 +2,64 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 from django.contrib import messages
-from accounts.models import Recipient, Hospital, BloodSupply
+from accounts.models import Recipient, Hospital, BloodSupply, Transfusion
 from transfusion.forms import TransfusionForm
 from django.db import IntegrityError
 
 
-def is_approved(blood_supply, field_name):
-    init_value = getattr(blood_supply, field_name)
+def is_available(blood_supply, blood_type):
+    if blood_type == 'A+':
+        init_value = getattr(blood_supply, 'aplus_amount')
+    elif blood_type == 'B+':
+        init_value = getattr(blood_supply, 'bplus_amount')
+    elif blood_type == 'AB+':
+        init_value = getattr(blood_supply, 'abplus_amount')
+    elif blood_type == 'O+':
+        init_value = getattr(blood_supply, 'oplus_amount')
+    elif blood_type == 'A-':
+        init_value = getattr(blood_supply, 'amin_amount')
+    elif blood_type == 'B-':
+        init_value = getattr(blood_supply, 'bmin_amount')
+    elif blood_type == 'AB-':
+        init_value = getattr(blood_supply, 'abmin_amount')
+    else:
+        init_value = getattr(blood_supply, 'omin_amount')
+
     if init_value > 0:
-        setattr(blood_supply, field_name, init_value - 1)
-        blood_supply.save(update_fields=[field_name])
         return True
     else:
         return False
+
+
+def update_blood_supply(blood_supply, blood_type):
+    if blood_type == 'A+':
+        init_value = getattr(blood_supply, 'aplus_amount')
+        field_name = 'aplus_amount'
+    elif blood_type == 'B+':
+        init_value = getattr(blood_supply, 'bplus_amount')
+        field_name = 'bplus_amount'
+    elif blood_type == 'AB+':
+        init_value = getattr(blood_supply, 'abplus_amount')
+        field_name = 'abplus_amount'
+    elif blood_type == 'O+':
+        init_value = getattr(blood_supply, 'oplus_amount')
+        field_name = 'oplus_amount'
+    elif blood_type == 'A-':
+        init_value = getattr(blood_supply, 'amin_amount')
+        field_name = 'amin_amount'
+    elif blood_type == 'B-':
+        init_value = getattr(blood_supply, 'bmin_amount')
+        field_name = 'bmin_amount'
+    elif blood_type == 'AB-':
+        init_value = getattr(blood_supply, 'abmin_amount')
+        field_name = 'abmin_amount'
+    else:
+        init_value = getattr(blood_supply, 'omin_amount')
+        field_name = 'omin_amount'
+
+    setattr(blood_supply, field_name, init_value - 1)
+    blood_supply.save(update_fields=[field_name])
+    return True
 
 
 class TransfusionView(View):
@@ -33,53 +78,48 @@ class TransfusionView(View):
         user_id = request.POST['hospital']
         if form.is_valid():
             # getting the hospital object by its user_id and assigning it to hospital field
+            blood_type = request.session['blood_type']
             hospital = Hospital.objects.get(user_id=user_id)
-            transfusion = form.save(commit=False)
-            transfusion.hospital = hospital
-            transfusion.status = True
-            
-            # getting donor object through its username and assigning it to donor field
-            recipient = Recipient.objects.get(username=request.session['username'])
-            transfusion.recipient = recipient
-            
             # get blood supply of hospital
             blood_supply = BloodSupply.objects.get(pk=hospital.blood_supply_id)
-            
-            # update base on blood_type if available--------
-            if request.session['blood_type'] == 'A+':
-                approved = is_approved(blood_supply, 'aplus_amount')
-                type = 'A+'
-            elif request.session['blood_type'] == 'A-':
-                approved = is_approved(blood_supply, 'amin_amount')
-                type = 'A-'
-            elif request.session['blood_type'] == 'B+':
-                approved = is_approved(blood_supply, 'bplus_amount')
-                type = 'B+'
-            elif request.session['blood_type'] == 'B-':
-                approved = is_approved(blood_supply, 'bmin_amount')
-                type = 'B-'
-            elif request.session['blood_type'] == 'AB+':
-                approved = is_approved(blood_supply, 'abplus_amount')
-                type = 'AB+'
-            elif request.session['blood_type'] == 'AB-':
-                approved = is_approved(blood_supply, 'abmin_amount')
-                type = 'AB-'
-            elif request.session['blood_type'] == 'O+':
-                approved = is_approved(blood_supply, 'oplus_amount')
-                type = 'O+'
-            else:
-                approved = is_approved(blood_supply, 'omin_amount')
-                type = 'O-'
-            # ----------------------------------------------
 
             try:
-                if approved:
+                if is_available(blood_supply, blood_type):
+                    # print("hello ", blood_type)
+                    transfusion = form.save(commit=False)
+                    transfusion.hospital = hospital
+                    transfusion.status = 'Pending'
+                    recipient = Recipient.objects.get(username=request.session['username'])
+                    transfusion.recipient = recipient
                     transfusion.save()
                     messages.success(request, 'Transfusion recorded successfully!')
                 else:
-                    messages.error(request, 'Hospital has no ' + type + ' blood in their supply.')
+                    messages.error(request, 'Hospital has no ' + blood_type + ' blood in their supply.')
                 return redirect(reverse('accounts:index'))
             except IntegrityError:
                 messages.error(request, "You can only receive transfusion once in a day.")
                 return redirect(reverse('accounts:index'))
         return render(request, self.template, {'form': form})
+
+
+def update_transfusion(request, id):
+    if request.method == 'POST':
+        if 'A' in request.POST:
+            transfusion = Transfusion.objects.get(pk=id)
+            blood_type = transfusion.recipient.blood_type
+            hospital = transfusion.hospital
+            blood_supply = BloodSupply.objects.get(pk=hospital.blood_supply_id)
+            if is_available(blood_supply, blood_type):
+                if update_blood_supply(blood_supply, blood_type):
+                    setattr(transfusion, 'status', 'Approved')
+                    transfusion.save(update_fields=['status'])
+                    messages.success(request, 'Transfusion request granted!')
+            else:
+                messages.error(request, 'You have no ' + blood_type + ' blood in your supply.')
+
+        elif 'D' in request.POST:
+            transfusion = Transfusion.objects.get(pk=id)
+            setattr(transfusion, 'status', 'Declined')
+            transfusion.save(update_fields=['status'])
+
+    return redirect(reverse('accounts:index'))

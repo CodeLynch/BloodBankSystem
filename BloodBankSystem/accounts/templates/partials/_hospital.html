@@ -25,14 +25,22 @@
                 <th>Recipient</th>
                 <th>Transfusion Date</th>
                 <th>Status</th>
+                <th>Response</th>
             </tr>     
         </thead>
-        <tbody>
+        <tbody align="center">
             {% for transfusion in transfusions %}
                 <tr>
                     <td>{{ transfusion.recipient }}</td>
                     <td>{{ transfusion.transfusion_date }}</td>
                     <td>{{ transfusion.status }}</td>
+                    <td>
+                        <form action="{% url 'transfusion:update_transfusion' transfusion.id %}" method="POST">
+                            {% csrf_token %}
+                            <input type="submit" name="A" value="ACCEPT">
+                            <input type="submit" name="D" value="DECLINE">
+                         </form>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -65,7 +73,7 @@
                 <th>Status</th>
             </tr>     
         </thead>
-        <tbody>
+        <tbody align="center">
             {% for request in requests %}
                 <tr>
                     <td>{{ request.blood_bank }}</td>

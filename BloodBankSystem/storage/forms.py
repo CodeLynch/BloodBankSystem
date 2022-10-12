@@ -8,14 +8,14 @@ min = 0
 
 class BloodSupplyForm(forms.ModelForm):
 
-    aplus_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min}), label='A+ amount')
-    amin_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min}), label='A- amount')
-    bplus_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min}), label='B+ amount')
-    bmin_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min}), label='B- amount')
-    abplus_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min}), label='AB+ amount')
-    abmin_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min}), label='AB- amount')
-    oplus_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min}), label='O+ amount')
-    omin_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min}), label='O- amount')
+    aplus_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min, 'class': 'form-control'}), label='A+ amount')
+    amin_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min, 'class': 'form-control'}), label='A- amount')
+    bplus_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min, 'class': 'form-control'}), label='B+ amount')
+    bmin_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min, 'class': 'form-control'}), label='B- amount')
+    abplus_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min, 'class': 'form-control'}), label='AB+ amount')
+    abmin_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min, 'class': 'form-control'}), label='AB- amount')
+    oplus_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min, 'class': 'form-control'}), label='O+ amount')
+    omin_amount = forms.IntegerField(widget=forms.NumberInput(attrs={'max': max, 'min': min, 'class': 'form-control'}), label='O- amount')
 
     class Meta:
         model = BloodSupply

@@ -5,54 +5,66 @@ Edit Profile
 {% endblock %}
 
 {% block content %}
-<nav>
-    <a href="{% url 'accounts:index' %}">
-       {% if request.session.type == 'D' %} 
-          Donor: {{ request.session.first_name }} {{ request.session.last_name }}
-       {% elif request.session.type == 'R' %} 
-          Recipient: {{ request.session.first_name }} {{ request.session.last_name }}
-       {% elif request.session.type == 'H' %} 
-          Hospital: {{ request.session.name }}
-       {% elif request.session.type == 'B' %} 
-          Blood Bank: {{ request.session.name }}
-       {% endif %}
-    </a>
-    <ul>
-       {% if request.session.type == 'D' %}
-          <li><a href="{% url 'accounts:index' %}">Donations</a></li>
-          <li><a href="{% url 'donation:index' %}">Add Donation</a></li>
-          <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
-       {% elif request.session.type == 'R' %}
-          <li><a href="{% url 'accounts:index' %}">Transfusions</a></li>
-          <li><a href="{% url 'transfusion:index' %}">Add Transfusion</a></li>
-          <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
-       {% elif request.session.type == 'H' %}
-          <li><a href="{% url 'accounts:index' %}">Pending Requests and Donations</a></li>
-          <li><a href="{% url 'request:request_blood_supply' %}">Request Blood Supply</a></li>
-          {% if request.session.blood_supply_id == None %}
-             <li><a href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
-          {% else %}
-             <li><a href="{% url 'storage:update_blood_supply' %}">Update Blood Supply</a></li>
-          {% endif %}
-          <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
-       {% elif request.session.type == 'B' %}
-          <li><a href="{% url 'accounts:index' %}">Pending Requests and Donations</a></li>
-          {% if request.session.blood_supply_id == None %}
-             <li><a href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
-          {% else %}
-             <li><a href="{% url 'storage:update_blood_supply' %}">Update Blood Supply</a></li>
-          {% endif %}
-          <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
-       {% endif %}
-          <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
-    </ul>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+            <a class="text-decoration-none navbar-brand px-2" href="{% url 'accounts:index' %}">
+               {% if request.session.type == 'D' %}
+                  Donor: {{ request.session.first_name }} {{ request.session.last_name }}
+               {% elif request.session.type == 'R' %}
+                  Recipient: {{ request.session.first_name }} {{ request.session.last_name }}
+               {% elif request.session.type == 'H' %}
+                  Hospital: {{ request.session.name }}
+               {% elif request.session.type == 'B' %}
+                  Blood Bank: {{ request.session.name }}
+               {% endif %}
+            </a>
+            <ul class="navbar-nav me-auto">
+               {% if request.session.type == 'D' %}
+                  <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'accounts:index' %}">Donations</a></li>
+                  <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'donation:index' %}">Add Donation</a></li>
+                  <li class="nav-item"><a class="text-decoration-none nav-link active" href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
+               {% elif request.session.type == 'R' %}
+                  <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'accounts:index' %}">Transfusions</a></li>
+                  <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'transfusion:index' %}">Add Transfusion</a></li>
+                  <li class="nav-item"><a class="text-decoration-none nav-link active" href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
+               {% elif request.session.type == 'H' %}
+                  <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'accounts:index' %}">Pending Requests and Donations</a></li>
+                  <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'request:request_blood_supply' %}">Request Blood Supply</a></li>
+                  {% if request.session.blood_supply_id == None %}
+                     <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
+                  {% else %}
+                     <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'storage:update_blood_supply' %}">Update Blood Supply</a></li>
+                  {% endif %}
+                  <li class="nav-item"><a class="text-decoration-none nav-link active" href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
+               {% elif request.session.type == 'B' %}
+                  <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'accounts:index' %}">Pending Requests and Donations</a></li>
+                  {% if request.session.blood_supply_id == None %}
+                     <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
+                  {% else %}
+                     <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'storage:update_blood_supply' %}">Update Blood Supply</a></li>
+                  {% endif %}
+                  <li class="nav-item"><a class="text-decoration-none nav-link active" href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
+               {% endif %}
+                  <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'accounts:logout' %}">Logout</a></li>
+            </ul>
+    </div>
  </nav>
 
  <!-- Main -->
-<h1>Edit Profile</h1>
-<form method="post">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button type="submit">Save</button>
-</form>
+<div class="container">
+<h1 class="p-3" >Edit Profile</h1>
+        <div class="container2" align="center">
+
+            <div class="card border-primary shadow p-3 mb-5 bg-white rounded" style="max-width: 30rem;" align="left">
+                    <div class="card-body">
+                        <form method="post">
+                            {% csrf_token %}
+                            {{form.as_p}}
+                            <button type="submit" class="btn btn-secondary btn-sm" >Save</button>
+                        </form>
+                    </div>
+                </div>
+        </div>
+</div>
 {% endblock %}
