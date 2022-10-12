@@ -1,16 +1,40 @@
 from django.db import models
 from django.core.validators import RegexValidator
+from django.utils.html import mark_safe
+from datetime import datetime
+from PIL import Image
+import os, random
+
 
 contact_number_validator = RegexValidator(regex= r'^(09|\+639)\d{9}$')
 
 
+def image_path(instance, filename):
+    base_filename, file_extension = os.path.splitext(filename)
+    char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
+    randomstr = ''.join((random.choice(char)) for x in range(10))
+    now = datetime.now()
+    return 'user_image/{year}-{month}-{day}-{image_id}-{base_name}-{randstr}{ext}'.format(image_id=instance, base_name=base_filename, randstr=randomstr, ext=file_extension, year=now.strftime('%Y'), month=now.strftime('%m'), day=now.strftime('%d'))
+
+    
 class User(models.Model):
     type_user = (('I', 'Individual'), ('O', 'Organization'))
     user_id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=50, unique=True)
     password = models.CharField(max_length=50)
+    user_image = models.ImageField(default='default.png', upload_to=image_path, verbose_name='Profile picture')
     type = models.CharField(max_length=1, choices=type_user)
 
+    def __str__(self):
+        return self.username
+
+    def image_tag(self):
+        return mark_safe('<img src="/media/%s" class="rounded-circle border" width="45" height="45"/>'%(self.user_image))
+
+    def set_to_default(self):
+        self.user_image = 'default.png'
+        self.save()
+        
 
 class Individual(User):
     type_individual = (('D', 'Donor'), ('R', 'Recipient'))

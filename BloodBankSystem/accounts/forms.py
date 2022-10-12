@@ -15,9 +15,10 @@ class DonorForm(forms.ModelForm):
 
     class Meta:
         model = Donor
-        fields = ('username', 'password', 'first_name', 'middle_name', 'last_name', 'contact_number', 'age', 'weight', 'blood_type', 'health_condition')
+        fields = ('user_image', 'username', 'password', 'first_name', 'middle_name', 'last_name', 'contact_number', 'age', 'weight', 'blood_type', 'health_condition')
 
         widgets = {
+            'user_image': forms.FileInput(attrs={'class': 'form-control'}),
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'password': forms.PasswordInput(attrs={'class': 'form-control'}),
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -48,9 +49,10 @@ class RecipientForm(forms.ModelForm):
 
     class Meta:
         model = Recipient
-        fields = ('username', 'password', 'first_name', 'middle_name', 'last_name', 'contact_number', 'age', 'weight', 'blood_type', 'health_condition')
+        fields = ('user_image', 'username', 'password', 'first_name', 'middle_name', 'last_name', 'contact_number', 'age', 'weight', 'blood_type', 'health_condition')
 
         widgets = {
+            'user_image': forms.FileInput(attrs={'class': 'form-control'}),
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'password': forms.PasswordInput(attrs={'class': 'form-control'}),
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -81,9 +83,10 @@ class HospitalForm(forms.ModelForm):
 
     class Meta:
         model = Hospital
-        fields = ('username', 'password', 'name', 'address', 'contact_number')
+        fields = ('user_image', 'username', 'password', 'name', 'address', 'contact_number')
 
         widgets = {
+            'user_image': forms.FileInput(attrs={'class': 'form-control'}),
             'user_image': forms.FileInput(attrs={'class': 'form-control'}),
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'password': forms.PasswordInput(attrs={'class': 'form-control'}),
@@ -111,9 +114,10 @@ class BloodBankForm(forms.ModelForm):
 
     class Meta:
         model = BloodBank
-        fields = ('username', 'password', 'name', 'address', 'contact_number')
+        fields = ('user_image', 'username', 'password', 'name', 'address', 'contact_number')
 
         widgets = {
+            'user_image': forms.FileInput(attrs={'class': 'form-control'}),
             'user_image': forms.FileInput(attrs={'class': 'form-control'}),
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'password': forms.PasswordInput(attrs={'class': 'form-control'}),

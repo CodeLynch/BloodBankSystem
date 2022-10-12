@@ -1,4 +1,5 @@
 <nav>
+    {{ user_image }}
     <a href="{% url 'accounts:index' %}">
         Hospital: {{ request.session.name }}
     </a>

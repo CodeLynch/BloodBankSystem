@@ -1,5 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary" >
     <div class="container">
+            {{ user_image }}
             <a class="text-decoration-none navbar-brand px-2" href="{% url 'accounts:index' %}">
                 Blood Bank: {{ request.session.name }}
             </a>

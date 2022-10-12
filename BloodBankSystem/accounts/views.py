@@ -35,7 +35,7 @@ class HomeView(View):
             requests_page_number = request.GET.get('requests_page')
             requests = requests_paginator.get_page(requests_page_number)
 
-            context = {'lists': lists, 'requests': requests}
+            context = {'lists': lists, 'requests': requests, 'user_image': user.image_tag}
             return render(request, self.template, context)
 
 
@@ -86,32 +86,36 @@ def registration_view(request, type = None):
 
     if type == 'donor':
         form = DonorForm()
+        user_type = 'Donor'
     elif type == 'recipient':
         form = RecipientForm()
+        user_type = 'Recipient'
     elif type == 'hospital':
         form = HospitalForm()
+        user_type = 'Hospital'
     elif type == 'blood_bank':
         form = BloodBankForm()
+        user_type = 'Blood bank'
 
     if request.method == 'POST':
         if type == 'donor':
-            form = DonorForm(request.POST)
+            form = DonorForm(request.POST, request.FILES)
             user_type = 'Donor'
         elif type == 'recipient':
-            form = RecipientForm(request.POST)
+            form = RecipientForm(request.POST, request.FILES)
             user_type = 'Recipient'
         elif type == 'hospital':
-            form = HospitalForm(request.POST)
+            form = HospitalForm(request.POST, request.FILES)
             user_type = 'Hospital'
         elif type == 'blood_bank':
-            form = BloodBankForm(request.POST)
+            form = BloodBankForm(request.POST, request.FILES)
             user_type = 'Blood bank'
         if form.is_valid():
             form.save()
             messages.success(request, user_type + ' registered successfully!')
             return redirect(reverse('accounts:login'))
     
-    context = {'form': form}
+    context = {'form': form, 'user_type': user_type}
     return render(request, template, context)
 
 
@@ -139,19 +143,24 @@ class EditProfileView(View):
         if user.type == 'I':
             individual = Individual.objects.get(username=user.username)
             if individual.individual_type == 'R':
-                form = RecipientForm(request.POST, instance=individual)
+                form = RecipientForm(request.POST, request.FILES, instance=individual)
             else:
-                form = DonorForm(request.POST, instance=individual)
+                form = DonorForm(request.POST, request.FILES, instance=individual)
         elif user.type == 'O':
             org = Organization.objects.get(username=user.username)
             if org.org_type == 'H':
-                form = HospitalForm(request.POST, instance=org)
+                form = HospitalForm(request.POST, request.FILES, instance=org)
             else:
-                form = BloodBankForm(request.POST, instance=org)
+                form = BloodBankForm(request.POST, request.FILES, instance=org)
         if form.is_valid():
             username = request.POST.get('username')
             password = request.POST.get('password')
             form.save()
+
+            if 'remove_user_image' in request.POST:
+                user.set_to_default()
+                user.save()
+
             messages.success(request, 'Profile updated successfully!')
             try:
                 if User.objects.get(username=username):

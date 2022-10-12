@@ -1,4 +1,5 @@
 <nav>
+    {{ user_image }}
     <a href="{% url 'accounts:index' %}">
         Recipient: {{ request.session.first_name }} {{ request.session.last_name }}
     </a>

@@ -5,12 +5,144 @@ Register
 {% endblock %}
 
 {% block content %}
-<h1>Create an Account</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Register</button>
-</form>
-<span>Already have an account? </span>
-<a href="{% url 'accounts:login' %}">Login</a>
+<main class="container">
+    <div class="row align-items-center" style="height: 100vh;">
+        <!-- heading and subheading -->
+        <div class="col-md-5 text-md-start text-center py-5">
+            <h1 class="display-3">
+                Every blood is  <br>
+                <span class="text-primary display-2">precious.</span>
+            </h1>
+            <p class="lead mt-4">
+                Come and join the community now.
+            </p>
+        </div>
+
+        <!-- organization registration -->
+        {% if user_type == 'Hospital' or user_type == 'Blood bank' %}
+        <div class="col-md-7 shadow rounded px-5 py-5">
+            <h1 class="mb-3">Create an Account</h1>
+            <form method="post" enctype="multipart/form-data" class="row justify-content-center">
+                {% csrf_token %}
+                <div class="col-md-6">
+                    <div class="mt-2">
+                        {{ form.user_image.label_tag }}
+                        {{ form.user_image }}
+                        <small class="text-primary">{{ form.user_image.errors | striptags }}</small>
+                    </div>
+                    <div class="mt-2">
+                        {{ form.username.label_tag }}
+                        {{ form.username }}
+                        <small class="text-primary">{{ form.username.errors | striptags }}</small>
+                    </div>
+                    <div class="mt-2">
+                        {{ form.password.label_tag }}
+                        {{ form.password }}
+                        <small class="text-primary">{{ form.password.errors | striptags }}</small>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mt-2">
+                        {{ form.name.label_tag }}
+                        {{ form.name }}
+                        <small class="text-primary">{{ form.name.errors | striptags }}</small>
+                    </div>
+                    <div class="mt-2">
+                        {{ form.address.label_tag }}
+                        {{ form.address }}
+                        <small class="text-primary">{{ form.address.errors | striptags }}</small>
+                    </div>
+                    <div class="mt-2">
+                        {{ form.contact_number.label_tag }}
+                        {{ form.contact_number }}
+                        <small class="text-primary">{{ form.contact_number.errors | striptags }}</small>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary mt-4 form-control">Register</button>
+                </div>
+            </form>
+            <div class="text-center mt-3">
+                Already have an account? 
+                <a href="{% url 'accounts:login' %}">Login</a>
+            </div> 
+        </div>
+
+        <!-- individual registration -->
+        {% elif user_type == 'Donor' or user_type == 'Recipient' %}
+        <div class="col-md-7 shadow rounded px-5 py-4">
+            <h1 class="mb-3">Create an Account</h1>
+            <form method="post" enctype="multipart/form-data" class="row justify-content-center">
+                {% csrf_token %}
+                <div class="col-md-6">
+                    <div class="mt-2">
+                        {{ form.user_image.label_tag }}
+                        {{ form.user_image }}
+                        <small class="text-primary">{{ form.user_image.errors | striptags }}</small>
+                    </div>
+                    <div class="mt-2">
+                        {{ form.username.label_tag }}
+                        {{ form.username }}
+                        <small class="text-primary">{{ form.username.errors | striptags }}</small>
+                    </div>
+                    <div class="mt-2">
+                        {{ form.password.label_tag }}
+                        {{ form.password }}
+                        <small class="text-primary">{{ form.password.errors | striptags }}</small>
+                    </div>
+                    <div class="mt-2">
+                        {{ form.first_name.label_tag }}
+                        {{ form.first_name }}
+                        <small class="text-primary">{{ form.first_name.errors | striptags }}</small>
+                    </div>
+                    <div class="mt-2">
+                        {{ form.middle_name.label_tag }}
+                        {{ form.middle_name }}
+                        <small class="text-primary">{{ form.middle_name.errors | striptags }}</small>
+                    </div>
+                    <div class="mt-2">
+                        {{ form.last_name.label_tag }}
+                        {{ form.last_name }}
+                        <small class="text-primary">{{ form.last_name.errors | striptags }}</small>
+                    </div>        
+                </div>
+                <div class="col-md-6">
+                    <div class="mt-2">
+                        {{ form.contact_number.label_tag }}
+                        {{ form.contact_number }}
+                        <small class="text-primary">{{ form.contact_number.errors | striptags }}</small>
+                    </div>
+                    <div class="mt-2">
+                        {{ form.age.label_tag }}
+                        {{ form.age }}
+                        <small class="text-primary">{{ form.age.errors | striptags }}</small>
+                    </div>
+                    <div class="mt-2">
+                        {{ form.weight.label_tag }}
+                        {{ form.weight }}
+                        <small class="text-primary">{{ form.weight.errors | striptags }}</small>
+                    </div>
+                    <div class="mt-2">
+                        {{ form.blood_type.label_tag }}
+                        {{ form.blood_type }}
+                        <small class="text-primary">{{ form.blood_type.errors | striptags }}</small>
+                    </div>
+                    <div class="mt-2">
+                        {{ form.health_condition.label_tag }}
+                        {{ form.health_condition }}
+                        <small class="text-primary">{{ form.health_condition.errors | striptags }}</small>
+                    </div> 
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary mt-4 form-control">Register</button>
+                </div>
+            </form>
+            <div class="text-center mt-3">
+                Already have an account? 
+                <a href="{% url 'accounts:login' %}">Login</a>
+            </div> 
+        </div>
+        {% endif %}
+    </div>
+</main>
 {% endblock %}
