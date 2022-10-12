@@ -1,26 +1,29 @@
-<nav>
-    <a href="{% url 'accounts:index' %}">
-        Blood Bank: {{ request.session.name }}
-    </a>
-    <ul>
-        <li><a href="{% url 'accounts:index' %}">Pending Requests and Donations</a></li>
-        {% if request.session.blood_supply_id == None %}
-            <li><a href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
-        {% else %}
-            <li><a href="{% url 'storage:update_blood_supply' %}">Update Blood Supply</a></li>
-        {% endif %}
-        <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
-        <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
-    </ul>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary" >
+    <div class="container">
+            <a class="text-decoration-none navbar-brand px-2" href="{% url 'accounts:index' %}">
+                Blood Bank: {{ request.session.name }}
+            </a>
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item" ><a class="text-decoration-none nav-link active"  href="{% url 'accounts:index' %}">Pending Requests and Donations</a></li>
+                {% if request.session.blood_supply_id == None %}
+                <li class="nav-item"><a class="text-decoration-none nav-link "  href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
+                {% else %}
+                <li class="nav-item"><a class="text-decoration-none nav-link "  href="{% url 'storage:update_blood_supply' %}">Update Blood Supply</a></li>
+                {% endif %}
+                <li class="nav-item"><a class="text-decoration-none nav-link "  href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
+                <li class="nav-item"><a class="text-decoration-none nav-link "  href="{% url 'accounts:logout' %}">Logout</a></li>
+            </ul>
+    </div>
 </nav>
 
-<main>
-{% if donations %}
+
+<main class="container">
+<h2 class="p-2">Donations</h2>
+    {% if donations %}
     <!-- Donations Table -->
-    <h2>Donations</h2>
-    <table style="width:50%">
+    <table style="width:70%" class="table table-hover shadow-sm p-3 mb-5 bg-white rounded" align="center">
         <thead>
-            <tr>
+            <tr class="table-primary" align="center">
                 <!--<th>Blood Bank</th>-->
                 <th>Donor</th>
                 <th>Blood Type</th>
@@ -39,8 +42,8 @@
                     <td>
                          <form action="{% url 'storage:update_donation' donation.id %}" method="POST">
                              {% csrf_token %}
-                              <input type="submit" name="A" value="ACCEPT">
-                              <input type="submit" name="D" value="DECLINE">
+                              <input class="btn btn-outline-success" type="submit" name="A" value="ACCEPT">
+                              <input class="btn btn-outline-primary" type="submit" name="D" value="DECLINE">
                          </form>
                     </td>
                 </tr>
@@ -58,15 +61,15 @@
         {% endif %}
      </ul>
 {% else %}
-    <p>No pending donations.</p>
+    <p class="text-primary" align="center">No pending donations.</p>
 {% endif %}
 
+    <h2 class="p-2">Requests</h2>
 {% if requests %}
     <!-- Requests Table -->
-    <h2>Requests</h2>
-    <table style="width:50%">
+    <table style="width:70%" class="table table-hover shadow-sm p-3 mb-5 bg-white rounded" align="center">
         <thead>
-            <tr>
+            <tr class="table-primary" align="center"">
                 <th>Hospital</th>
                 <th>Request Date</th>
                 <th>Blood Type</th>
@@ -75,10 +78,10 @@
                 <th>Response</th>
             </tr>     
         </thead>
-        <tbody>
+        <tbody align="center">
             {% for request_o in requests %}
                 <tr>
-                    <td>{{ request_o.hospital }}</td>
+                    <td>{{ request_o.hospital.name }}</td>
                     <td>{{ request_o.request_date }}</td>
                     <td>{{ request_o.blood_type }}</td>
                     <td>{{ request_o.quantity }}</td>
@@ -86,8 +89,8 @@
                     <td>
                         <form action="{% url 'storage:update_request' request_o.id %}" method="POST">
                             {% csrf_token %}
-                            <input type="submit" name="A" value="ACCEPT">
-                            <input type="submit" name="D" value="DECLINE">
+                            <input class="btn btn-outline-success" type="submit" name="A" value="ACCEPT">
+                            <input class="btn btn-outline-primary" type="submit" name="D" value="DECLINE">
                          </form>
                     </td>
                 </tr>
@@ -106,6 +109,6 @@
         {% endif %}
     </ul>
 {% else %}
-    <p>No pending requests.</p>
+    <p class="text-primary" align="center">No pending requests.</p>
 {% endif %}
 </main>

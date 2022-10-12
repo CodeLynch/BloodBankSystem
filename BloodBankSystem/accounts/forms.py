@@ -105,6 +105,7 @@ class HospitalForm(forms.ModelForm):
 
 
 class BloodBankForm(forms.ModelForm):
+
     type = 'O'
     org_type = 'B'
 
