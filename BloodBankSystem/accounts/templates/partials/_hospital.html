@@ -26,15 +26,17 @@
                 <th>Recipient</th>
                 <th>Transfusion Date</th>
                 <th>Status</th>
+                <th>Requested Blood Type</th>
                 <th>Response</th>
             </tr>     
         </thead>
-        <tbody align="center">
+        <tbody>
             {% for transfusion in transfusions %}
                 <tr>
                     <td>{{ transfusion.recipient }}</td>
                     <td>{{ transfusion.transfusion_date }}</td>
                     <td>{{ transfusion.status }}</td>
+                    <td>{{ transfusion.requested_blood_type }}</td>
                     <td>
                         <form action="{% url 'transfusion:update_transfusion' transfusion.id %}" method="POST">
                             {% csrf_token %}

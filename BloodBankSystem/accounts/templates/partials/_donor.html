@@ -11,17 +11,17 @@
         </button>
         <div class="navbar-collapse collapse show justify-content-between" id="navbarColor03">
             <ul class="navbar-nav">
-                <li class="nav-item d-sm-none">
+                <li class="nav-item d-block d-lg-none">
                     {{ user_image }}
                     <strong class="ms-2"> {{ request.session.first_name }} {{ request.session.last_name }}</strong>
                 </li> <!-- small screen only -->
                 <li class="nav-item"><a class="nav-link active" href="{% url 'accounts:index' %}">Donations</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'donation:index' %}">Add Donation</a></li>
-                <li class="nav-item d-block d-sm-none"><a class="nav-link" href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li> <!-- small screen only -->
-                <li class="nav-item d-block d-sm-none"><a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a></li> <!-- small screen only -->
+                <li class="nav-item d-block d-lg-none"><a class="nav-link" href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li> <!-- small screen only -->
+                <li class="nav-item d-block d-lg-none"><a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a></li> <!-- small screen only -->
             </ul>
             <!-- large screen only -->
-            <div class="dropdown d-none d-sm-block"> 
+            <div class="dropdown d-none d-lg-block"> 
                 <a class="nav-link dropdown-toggle justify-content-between" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                     <strong class="me-2"> {{ request.session.first_name }} {{ request.session.last_name }}</strong>
                     {{ user_image }}
