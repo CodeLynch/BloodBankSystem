@@ -87,34 +87,37 @@ class DeleteBloodSupplyView(View):
 def update_donation(request, id):
     if request.method == 'POST':
         if 'A' in request.POST:
-            donation = Donation.objects.get(pk=id)
-            setattr(donation, 'status', 'Accepted')
-            donation.save(update_fields=['status'])
-
-            # get bloodt ype, blood supply of user
-            blood_type = donation.donor.blood_type
-            blood_supplyID = request.session['blood_supply_id']
-            blood_supply = BloodSupply.objects.get(pk=blood_supplyID)
-            # update base on blood_type--------------------
-            if blood_type == 'A+':
-                approved = is_approved(blood_supply, 'aplus_amount')
-            elif blood_type == 'A-':
-                approved = is_approved(blood_supply, 'amin_amount')
-            elif blood_type == 'B+':
-                approved = is_approved(blood_supply, 'bplus_amount')
-            elif blood_type == 'B-':
-                approved = is_approved(blood_supply, 'bmin_amount')
-            elif blood_type == 'AB+':
-                approved = is_approved(blood_supply, 'abplus_amount')
-            elif blood_type == 'AB-':
-                approved = is_approved(blood_supply, 'abmin_amount')
-            elif blood_type == 'O+':
-                approved = is_approved(blood_supply, 'oplus_amount')
+            if request.session['blood_supply_id'] is None:
+                messages.error(request, 'You do not have a blood supply')
             else:
-                approved = is_approved(blood_supply, 'omin_amount')
-            # ----------------------------------------------
-            if approved:
-                messages.success(request, 'Blood Bank updated!')
+                donation = Donation.objects.get(pk=id)
+                setattr(donation, 'status', 'Accepted')
+                donation.save(update_fields=['status'])
+
+                # get blood type, blood supply of user
+                blood_type = donation.donor.blood_type
+                blood_supplyID = request.session['blood_supply_id']
+                blood_supply = BloodSupply.objects.get(pk=blood_supplyID)
+                # update base on blood_type--------------------
+                if blood_type == 'A+':
+                    approved = is_approved(blood_supply, 'aplus_amount')
+                elif blood_type == 'A-':
+                    approved = is_approved(blood_supply, 'amin_amount')
+                elif blood_type == 'B+':
+                    approved = is_approved(blood_supply, 'bplus_amount')
+                elif blood_type == 'B-':
+                    approved = is_approved(blood_supply, 'bmin_amount')
+                elif blood_type == 'AB+':
+                    approved = is_approved(blood_supply, 'abplus_amount')
+                elif blood_type == 'AB-':
+                    approved = is_approved(blood_supply, 'abmin_amount')
+                elif blood_type == 'O+':
+                    approved = is_approved(blood_supply, 'oplus_amount')
+                else:
+                    approved = is_approved(blood_supply, 'omin_amount')
+                # ----------------------------------------------
+                if approved:
+                    messages.success(request, 'Blood Bank updated!')
         elif 'D' in request.POST:
             donation = Donation.objects.get(pk=id)
             setattr(donation, 'status', 'Declined')
@@ -126,49 +129,52 @@ def update_donation(request, id):
 def update_request(request, id):
     if request.method == 'POST':
         if 'A' in request.POST:
-            request_o = Request.objects.get(pk=id)
-            # get blood type, quantity, and blood supply of giver and receiver
-            blood_type = request_o.blood_type
-            quantity = request_o.quantity
-            giver_supplyID = request.session['blood_supply_id']
-            receiver_supplyID = request_o.hospital.blood_supply.supply_id
-            giver_blood_supply = BloodSupply.objects.get(pk=giver_supplyID)
-            receiver_blood_supply = BloodSupply.objects.get(pk=receiver_supplyID)
-
-            # update hospital and blood bank supply if available--------
-            if blood_type == 'A+':
-                approved = request_is_approved(giver_blood_supply, receiver_blood_supply, 'aplus_amount', quantity)
-                type = 'A+'
-            elif blood_type == 'A-':
-                approved = request_is_approved(giver_blood_supply, receiver_blood_supply, 'amin_amount', quantity)
-                type = 'A-'
-            elif blood_type == 'B+':
-                approved = request_is_approved(giver_blood_supply, receiver_blood_supply, 'bplus_amount', quantity)
-                type = 'B+'
-            elif blood_type == 'B-':
-                approved = request_is_approved(giver_blood_supply, receiver_blood_supply, 'bmin_amount', quantity)
-                type = 'B-'
-            elif blood_type == 'AB+':
-                approved = request_is_approved(giver_blood_supply, receiver_blood_supply, 'abplus_amount', quantity)
-                type = 'AB+'
-            elif blood_type == 'AB-':
-                approved = request_is_approved(giver_blood_supply, receiver_blood_supply, 'abmin_amount', quantity)
-                type = 'AB-'
-            elif blood_type == 'O+':
-                approved = request_is_approved(giver_blood_supply, receiver_blood_supply, 'oplus_amount', quantity)
-                type = 'O+'
+            if request.session['blood_supply_id'] is None:
+                messages.error(request, 'You do not have a blood supply')
             else:
-                approved = request_is_approved(giver_blood_supply, receiver_blood_supply, 'omin_amount', quantity)
-                type = 'O-'
-            # ----------------------------------------------------------
+                request_o = Request.objects.get(pk=id)
+                # get blood type, quantity, and blood supply of giver and receiver
+                blood_type = request_o.blood_type
+                quantity = request_o.quantity
+                giver_supplyID = request.session['blood_supply_id']
+                receiver_supplyID = request_o.hospital.blood_supply.supply_id
+                giver_blood_supply = BloodSupply.objects.get(pk=giver_supplyID)
+                receiver_blood_supply = BloodSupply.objects.get(pk=receiver_supplyID)
 
-            if approved:
-                messages.success(request,
-                                 'A supply of blood type ' + type + ' successfully given to ' + request_o.hospital.name + "!")
-                setattr(request_o, 'status', 'Accepted')
-                request_o.save(update_fields=['status'])
-            else:
-                messages.error(request, 'You do not have sufficient ' + type + ' blood in your supply.')
+                # update hospital and blood bank supply if available--------
+                if blood_type == 'A+':
+                    approved = request_is_approved(giver_blood_supply, receiver_blood_supply, 'aplus_amount', quantity)
+                    type = 'A+'
+                elif blood_type == 'A-':
+                    approved = request_is_approved(giver_blood_supply, receiver_blood_supply, 'amin_amount', quantity)
+                    type = 'A-'
+                elif blood_type == 'B+':
+                    approved = request_is_approved(giver_blood_supply, receiver_blood_supply, 'bplus_amount', quantity)
+                    type = 'B+'
+                elif blood_type == 'B-':
+                    approved = request_is_approved(giver_blood_supply, receiver_blood_supply, 'bmin_amount', quantity)
+                    type = 'B-'
+                elif blood_type == 'AB+':
+                    approved = request_is_approved(giver_blood_supply, receiver_blood_supply, 'abplus_amount', quantity)
+                    type = 'AB+'
+                elif blood_type == 'AB-':
+                    approved = request_is_approved(giver_blood_supply, receiver_blood_supply, 'abmin_amount', quantity)
+                    type = 'AB-'
+                elif blood_type == 'O+':
+                    approved = request_is_approved(giver_blood_supply, receiver_blood_supply, 'oplus_amount', quantity)
+                    type = 'O+'
+                else:
+                    approved = request_is_approved(giver_blood_supply, receiver_blood_supply, 'omin_amount', quantity)
+                    type = 'O-'
+                # ----------------------------------------------------------
+
+                if approved:
+                    messages.success(request,
+                                     'A supply of blood type ' + type + ' successfully given to ' + request_o.hospital.name + "!")
+                    setattr(request_o, 'status', 'Accepted')
+                    request_o.save(update_fields=['status'])
+                else:
+                    messages.error(request, 'You do not have sufficient ' + type + ' blood in your supply.')
 
         elif 'D' in request.POST:
             request_o = Request.objects.get(pk=id)
