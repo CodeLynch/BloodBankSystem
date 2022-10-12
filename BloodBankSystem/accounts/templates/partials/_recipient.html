@@ -20,6 +20,7 @@
             <tr>
                 <th>Hospital</th>
                 <th>Transfusion Date</th>
+                <th>Requested Blood Type</th>
                 <th>Status</th>
             </tr>     
         </thead>
@@ -28,6 +29,7 @@
                 <tr>
                     <td>{{ transfusion.hospital }}</td>
                     <td>{{ transfusion.transfusion_date }}</td>
+                    <td>{{ transfusion.requested_blood_type }}</td>
                     <td>{{ transfusion.status }}</td>
                 </tr>
             {% endfor %}

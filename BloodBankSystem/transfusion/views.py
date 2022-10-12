@@ -8,6 +8,7 @@ from django.db import IntegrityError
 
 
 def is_available(blood_supply, blood_type):
+    init_value = 0
     if blood_type == 'A+':
         init_value = getattr(blood_supply, 'aplus_amount')
     elif blood_type == 'B+':
@@ -32,6 +33,7 @@ def is_available(blood_supply, blood_type):
 
 
 def update_blood_supply(blood_supply, blood_type):
+    field_name=''
     if blood_type == 'A+':
         init_value = getattr(blood_supply, 'aplus_amount')
         field_name = 'aplus_amount'
@@ -69,28 +71,29 @@ class TransfusionView(View):
         if 'username' not in request.session:
             return redirect(reverse('accounts:login'))
         else:
-            form = TransfusionForm()
+            form = TransfusionForm(request.session['blood_type'])
             hospitals = Hospital.objects.exclude(blood_supply_id=None)
             return render(request, self.template, {'form': form, 'hospitals': hospitals})
 
     def post(self, request):
-        form = TransfusionForm(request.POST)
+        form = TransfusionForm(request.session['blood_type'], request.POST)
         user_id = request.POST['hospital']
         if form.is_valid():
             # getting the hospital object by its user_id and assigning it to hospital field
-            blood_type = request.session['blood_type']
-            hospital = Hospital.objects.get(user_id=user_id)
+            blood_type = request.POST.get('requested_blood_type')
+            hospital = Hospital.objects.get(pk=user_id)
             # get blood supply of hospital
             blood_supply = BloodSupply.objects.get(pk=hospital.blood_supply_id)
 
             try:
                 if is_available(blood_supply, blood_type):
-                    # print("hello ", blood_type)
+                    print("hello ", blood_type)
                     transfusion = form.save(commit=False)
                     transfusion.hospital = hospital
                     transfusion.status = 'Pending'
                     recipient = Recipient.objects.get(username=request.session['username'])
                     transfusion.recipient = recipient
+                    transfusion.requested_blood_type = blood_type
                     transfusion.save()
                     messages.success(request, 'Transfusion recorded successfully!')
                 else:
@@ -106,7 +109,7 @@ def update_transfusion(request, id):
     if request.method == 'POST':
         if 'A' in request.POST:
             transfusion = Transfusion.objects.get(pk=id)
-            blood_type = transfusion.recipient.blood_type
+            blood_type = transfusion.requested_blood_type
             hospital = transfusion.hospital
             blood_supply = BloodSupply.objects.get(pk=hospital.blood_supply_id)
             if is_available(blood_supply, blood_type):

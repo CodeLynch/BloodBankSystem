@@ -120,6 +120,7 @@ class Transfusion(models.Model):
     hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE)
     transfusion_date = models.DateField()
     status = models.CharField(max_length=10, choices=status_choices)
+    requested_blood_type = models.CharField(max_length=3)
 
     class Meta:
         unique_together = ('recipient', 'transfusion_date')
@@ -141,4 +142,3 @@ class Request(models.Model):
 
     def __str__(self):
         return 'Requested by %s to %s on %s' % (self.hospital, self.blood_bank, self.request_date)
-    
