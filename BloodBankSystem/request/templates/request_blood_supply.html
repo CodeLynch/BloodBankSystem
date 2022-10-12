@@ -6,56 +6,71 @@ Request Blood Supply
 
 {% block content %}
 <!-- Navbar -->
-<nav>
-    <a href="{% url 'accounts:index' %}">
-    Hospital: {{ request.session.name }}
-    </a>
-    <ul>
-        <li><a href="{% url 'accounts:index' %}">Requests</a></li>
-        {% if request.session.blood_supply_id == None %}
-            <li><a href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
-        {% else %}
-            <li><a href="{% url 'request:request_blood_supply' %}">Request Blood Supply</a></li>
-            <li><a href="{% url 'storage:update_blood_supply' %}">Update Blood Supply</a></li>
-        {% endif %}
-        <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
-        <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
-    </ul>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+            <a class="text-decoration-none navbar-brand px-2" href="{% url 'accounts:index' %}">
+                Hospital: {{ request.session.name }}
+            </a>
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'accounts:index' %}">Requests</a></li>
+            {% if request.session.blood_supply_id == None %}
+            <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
+            {% else %}
+            <li class="nav-item"><a class="text-decoration-none nav-link active " href="{% url 'request:request_blood_supply' %}">Request Blood Supply</a></li>
+            <li class="nav-item"><a class="text-decoration-none nav-link active " href="{% url 'storage:update_blood_supply' %}">Update Blood Supply</a></li>
+            {% endif %}
+            <li class="nav-item"><a class="text-decoration-none nav-link " href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
+            <li class="nav-item"><a class="text-decoration-none nav-link " href="{% url 'accounts:logout' %}">Logout</a></li>
+        </ul>
+    </div>
 </nav>
  
  <!-- Main -->
-<h1>Request Blood Supply</h1>
- <table style="width:50%" border="5">
-            <tr>
-               <th>Blood Bank</th>
-               <th>A+ amount</th>
-               <th>A- amount</th>
-                <th>B+ amount</th>
-               <th>B- amount</th>
-                <th>AB+ amount</th>
-               <th>AB- amount</th>
-                <th>O+ amount</th>
-               <th>O- amount</th>
-            </tr>
-         <tbody>
-            {% for bank in blood_banks %}
-               <tr>
-                  <td>{{ bank.name }}</td>
-                  <td>{{ bank.blood_supply.aplus_amount }}</td>
-                   <td>{{ bank.blood_supply.amin_amount }}</td>
-                   <td>{{ bank.blood_supply.bplus_amount }}</td>
-                   <td>{{ bank.blood_supply.bmin_amount }}</td>
-                   <td>{{ bank.blood_supply.abplus_amount }}</td>
-                   <td>{{ bank.blood_supply.abmin_amount }}</td>
-                   <td>{{ bank.blood_supply.oplus_amount }}</td>
-                   <td>{{ bank.blood_supply.omin_amount }}</td>
-               </tr>
-            {% endfor %}
-         </tbody>
-      </table>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Request</button>
-</form>
+<div class="container">
+    <h1>Request Blood Supply</h1>
+    <div class="container" align="center">
+        <div class="card border-primary shadow p-3 mb-5 bg-white rounded" style="max-width: 50rem;" align="left">
+            <table class="table table-striped" style="width:100%" border="5" align="center">
+                <thead>
+                    <tr align="center">
+                        <th scope="col">Blood Bank</th>
+                        <th>A+ amount</th>
+                        <th>A- amount</th>
+                        <th>B+ amount</th>
+                        <th>B- amount</th>
+                        <th>AB+ amount</th>
+                        <th>AB- amount</th>
+                        <th>O+ amount</th>
+                        <th>O- amount</th>
+                    </tr>
+                </thead>
+
+                <tbody align="center">
+                {% for bank in blood_banks %}
+                    <tr>
+                        <td>{{ bank.name }}</td>
+                        <td>{{ bank.blood_supply.aplus_amount }}</td>
+                        <td>{{ bank.blood_supply.amin_amount }}</td>
+                        <td>{{ bank.blood_supply.bplus_amount }}</td>
+                        <td>{{ bank.blood_supply.bmin_amount }}</td>
+                        <td>{{ bank.blood_supply.abplus_amount }}</td>
+                        <td>{{ bank.blood_supply.abmin_amount }}</td>
+                        <td>{{ bank.blood_supply.oplus_amount }}</td>
+                        <td>{{ bank.blood_supply.omin_amount }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table> 
+            
+            <div class="card-body">
+                <form method="POST" class="form-group">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button class="btn btn-secondary btn-sm" type="submit">Request</button>
+                </form>
+            
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
