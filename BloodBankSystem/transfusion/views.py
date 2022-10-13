@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 from django.contrib import messages
-from accounts.models import Recipient, Hospital, BloodSupply, Transfusion
+from accounts.models import Recipient, Hospital, BloodSupply, Transfusion, User
 from transfusion.forms import TransfusionForm
 from django.db import IntegrityError
 
@@ -71,9 +71,10 @@ class TransfusionView(View):
         if 'username' not in request.session:
             return redirect(reverse('accounts:login'))
         else:
+            user = User.objects.get(username=request.session['username'])
             form = TransfusionForm(request.session['blood_type'])
             hospitals = Hospital.objects.exclude(blood_supply_id=None)
-            return render(request, self.template, {'form': form, 'hospitals': hospitals})
+            return render(request, self.template, {'form': form, 'hospitals': hospitals, 'user_image': user.image_tag})
 
     def post(self, request):
         form = TransfusionForm(request.session['blood_type'], request.POST)
