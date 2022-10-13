@@ -3,52 +3,68 @@
 {% block title %}
 Add Donation
 {% endblock %}
-
 {% block content %}
+
 <!-- Navbar -->
-<nav>
-    <a href="{% url 'accounts:index' %}">
-        Donor: {{ request.session.first_name }} {{ request.session.last_name }}
-    </a>
-    <ul>
-        <li><a href="{% url 'accounts:index' %}">Donations</a></li>
-        <li><a href="{% url 'donation:index' %}">Add Donation</a></li>
-        <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
-        <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
-    </ul>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+ <div class="container">
+           <a href="#" class="navbar-brand">
+            {% load static %}
+            <img src="{% static 'accounts/static/image/blood.svg' %}" alt="" width="30" height="30">
+            <strong>BrandName</strong>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse show justify-content-between" id="navbarColor03">
+            <ul class="navbar-nav">
+                <li class="nav-item d-block d-lg-none">
+                    {{ user_image }}
+                    <strong class="ms-2"> {{ request.session.first_name|capfirst }} {{ request.session.last_name|capfirst }}</strong>
+                </li> <!-- small screen only -->
+                <li class="nav-item"><a class="nav-link active" href="{% url 'accounts:index' %}">Donations</a></li>
+                <li class="nav-item d-block d-lg-none active"><a class="nav-link" href="{% url 'donation:index' %}">Add Donation</a></li><!-- small screen only -->
+                <li class="nav-item d-block d-lg-none"><a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a></li> <!-- small screen only -->
+            </ul>
+            <!-- large screen only -->
+            <div class="dropdown d-none d-lg-block">
+                <a class="nav-link dropdown-toggle justify-content-between" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <strong class="me-2"> {{ request.session.first_name|capfirst }} {{ request.session.last_name|capfirst }}</strong>
+                    {{ user_image }}
+                </a>
+                <div class="dropdown-menu dropdown-menu-end">
+                    <a class="dropdown-item" href="{% url 'accounts:edit_profile' %}">Edit Profile</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </nav>
 
-<!-- Main -->
-<h1>Add Donation</h1>
- <table style="width:50%" border="5">
-            <tr>
-               <th>Blood Bank</th>
-               <th>A+ amount</th>
-               <th>A- amount</th>
-                <th>B+ amount</th>
-               <th>B- amount</th>
-                <th>AB+ amount</th>
-               <th>AB- amount</th>
-                <th>O+ amount</th>
-               <th>O- amount</th>
-            </tr>
-            {% for bank in blood_banks %}
-               <tr>
-                  <td>{{ bank.name }}</td>
-                  <td>{{ bank.blood_supply.aplus_amount }}</td>
-                   <td>{{ bank.blood_supply.amin_amount }}</td>
-                   <td>{{ bank.blood_supply.bplus_amount }}</td>
-                   <td>{{ bank.blood_supply.bmin_amount }}</td>
-                   <td>{{ bank.blood_supply.abplus_amount }}</td>
-                   <td>{{ bank.blood_supply.abmin_amount }}</td>
-                   <td>{{ bank.blood_supply.oplus_amount }}</td>
-                   <td>{{ bank.blood_supply.omin_amount }}</td>
-               </tr>
-            {% endfor %}
-      </table>
-<form method="post">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button type="submit">Save</button>
-</form>
+
+
+<div class="container">
+
+        <div class="container2" align="center" >
+            <h1 class="p-3" >Add Blood Donation</h1>
+            <div class="card border-primary shadow p-3 mb-5 bg-white rounded" style="max-width: 30rem;" align="left" >
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            </div>
+                            {{form.as_p}}
+                            <button type="submit" class="btn btn-secondary btn-sm" >Save</button>
+                        </form>
+                    </div>
+                </div>
+        </div>
+ <br>
+    <br>
+</div>
+
+
+
+
 {% endblock %}
