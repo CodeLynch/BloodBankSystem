@@ -34,6 +34,32 @@ class User(models.Model):
     def set_to_default(self):
         self.user_image = 'default.png'
         self.save()
+
+    def save(self, *args, **kwargs):
+        super().save()
+        img = Image.open(self.user_image.path)
+        width, height = img.size
+
+        if width > 300 and height > 300:
+            img.thumbnail((width, height))
+
+        if height < width:
+            left = (width - height) / 2
+            right = (width + height) / 2
+            top = 0
+            bottom = height
+            img = img.crop((left, top, right, bottom))
+        elif width < height:
+            left = 0
+            right = width
+            top = 0
+            bottom = width
+            img = img.crop((left, top, right, bottom))
+
+        if width > 300 and height > 300:
+            img.thumbnail((300, 300))
+            
+        img.save(self.user_image.path)
         
 
 class Individual(User):
