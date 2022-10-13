@@ -1,28 +1,58 @@
-<nav>
-    {{ user_image }}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a href="#" class="navbar-brand">
+            {% load static %}
+            <img src="{% static 'image/blood.svg' %}" alt="" width="30" height="30">
+            <strong>OneBlood</strong>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse show justify-content-between" id="navbarColor03">
+    <!-- {{ user_image }}
     <a href="{% url 'accounts:index' %}">
         Hospital: {{ request.session.name }}
-    </a>
-    <ul>
-        <li><a href="{% url 'accounts:index' %}">Pending Requests and Donations</a></li>
-        {% if request.session.blood_supply_id == None %}
-            <li><a href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
-        {% else %}
-            <li><a href="{% url 'request:request_blood_supply' %}">Request Blood Supply</a></li>
-            <li><a href="{% url 'storage:update_blood_supply' %}">Update Blood Supply</a></li>
-        {% endif %}
-        <li><a href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
-        <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
-    </ul>
+    </a> -->
+            <ul class="navbar-nav">
+                <li class="nav-item d-block d-lg-none">
+                    {{ user_image }}
+                    <strong class="ms-2"> Hospital: {{ request.session.name }} </strong>
+                </li>
+                <li class="nav-item"><a class="nav-link active" href="{% url 'accounts:index' %}">Pending Requests and Donations</a></li>
+                {% if request.session.blood_supply_id == None %}
+                <li class="nav-item"><a class="text-decoration-none nav-link " href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
+                {% else %}
+                <li class="nav-item"><a class="text-decoration-none nav-link " href="{% url 'request:request_blood_supply' %}">Request Blood Supply</a></li>
+                <li class="nav-item"><a class="text-decoration-none nav-link " href="{% url 'storage:update_blood_supply' %}">Update Blood Supply</a></li>
+                {% endif %}
+                <li class="nav-item d-block d-lg-none"><a class="nav-link" href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
+                <li class="nav-item d-block d-lg-none"><a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a></li>
+            </ul>
+
+            <div class="dropdown d-none d-lg-block">
+                <a class="nav-link dropdown-toggle justify-content-between" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <strong class="me-2"> Hospital: {{ request.session.name }} </strong>
+                    {{ user_image }}
+                </a>
+                <div class="dropdown-menu dropdown-menu-end">
+                    <a class="dropdown-item" href="{% url 'accounts:edit_profile' %}">Edit Profile</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
+            </div>   
+        </div>
+    </div>
 </nav>
 
-<main>
+<main class="container">
+<h1 align="left" >Welcome, {{ request.session.username }}!</h1>
+
 {% if transfusions %}
     <!-- Transfusions Table -->
-    <h2>Transfusions</h2>
-    <table style="width:50%">
+    <h2 border="200">Transfusions</h2>
+    <table style="width:70%" class="table table-hover shadow-sm p-3 mb-5 bg-white rounded" align="center">
         <thead>
-            <tr>
+            <tr class="table-primary" align="center">
                 <th>Recipient</th>
                 <th>Transfusion Date</th>
                 <th>Status</th>
@@ -30,7 +60,7 @@
                 <th>Response</th>
             </tr>     
         </thead>
-        <tbody>
+        <tbody align="center">
             {% for transfusion in transfusions %}
                 <tr>
                     <td>{{ transfusion.recipient }}</td>
@@ -40,8 +70,8 @@
                     <td>
                         <form action="{% url 'transfusion:update_transfusion' transfusion.id %}" method="POST">
                             {% csrf_token %}
-                            <input type="submit" name="A" value="ACCEPT">
-                            <input type="submit" name="D" value="DECLINE">
+                            <input class="btn btn-outline-success" type="submit" name="A" value="ACCEPT">
+                            <input class="btn btn-outline-primary" type="submit" name="D" value="DECLINE">
                          </form>
                     </td>
                 </tr>
@@ -66,9 +96,9 @@
 {% if requests %}
     <!-- Requests Table -->
     <h2>Requests</h2>
-    <table style="width:50%">
+    <table style="width:70%" class="table table-hover shadow-sm p-3 mb-5 bg-white rounded" align="center">
         <thead>
-            <tr>
+            <tr class="table-primary" align="center">
                 <th>Blood Bank</th>
                 <th>Request Date</th>
                 <th>Blood Type</th>
