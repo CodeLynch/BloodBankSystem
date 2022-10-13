@@ -1,11 +1,10 @@
 {% if messages %}
-            {% for message in messages %}
-            <div id="msg" class="container-fluid p-0">
-              <div class="alert {{ message.tags }}" role="alert" >
-                <button type="button" class="btn-close" data-bs-dismiss="alert">
-                </button>
-                {{ message }}
-              </div>
-            </div>
-            {% endfor %}
+  {% for message in messages %}
+    <div id="msg" class="position-relative">
+      <div class="alert {{ message.tags }} position-absolute top-0 start-50 translate-middle-x mt-3 fade show" role="alert" style="z-index: 999;">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        {{ message }}
+      </div>
+    </div>
+  {% endfor %}
 {% endif %}
