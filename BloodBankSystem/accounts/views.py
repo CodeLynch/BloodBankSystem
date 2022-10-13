@@ -136,7 +136,7 @@ class EditProfileView(View):
                 form = HospitalForm(instance=org)
             else:
                 form = BloodBankForm(instance=org)
-        return render(request, self.template, {'form': form})
+        return render(request, self.template, {'form': form, 'user_image': user.image_tag})
 
     def post(self, request):
         user = User.objects.get(username=request.session['username'])
