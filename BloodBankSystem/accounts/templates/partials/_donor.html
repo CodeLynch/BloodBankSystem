@@ -3,7 +3,7 @@
         <a href="#" class="navbar-brand">
             {% load static %}
             <img src="{% static 'image/blood.svg' %}" alt="" width="30" height="30">
-            <strong>BrandName</strong>
+            <strong>OneBlood</strong>
         </a>
         
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
@@ -13,7 +13,7 @@
             <ul class="navbar-nav">
                 <li class="nav-item d-block d-lg-none">
                     {{ user_image }}
-                    <strong class="ms-2"> {{ request.session.first_name }} {{ request.session.last_name }}</strong>
+                    <strong class="ms-2"> {{ request.session.first_name|capfirst }} {{ request.session.last_name|capfirst }}</strong>
                 </li> <!-- small screen only -->
                 <li class="nav-item"><a class="nav-link active" href="{% url 'accounts:index' %}">Donations</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'donation:index' %}">Add Donation</a></li>
@@ -23,7 +23,7 @@
             <!-- large screen only -->
             <div class="dropdown d-none d-lg-block"> 
                 <a class="nav-link dropdown-toggle justify-content-between" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                    <strong class="me-2"> {{ request.session.first_name }} {{ request.session.last_name }}</strong>
+                    <strong class="me-2"> {{ request.session.first_name|capfirst }} {{ request.session.last_name|capfirst }}</strong>
                     {{ user_image }}
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
@@ -36,19 +36,73 @@
     </div>
 </nav>
 
-<main>
-<h1>Welcome, {{ request.session.username }}!</h1>
+<style>
+
+img:hover {
+  opacity: 2.0;
+}
+.responsive {
+   width: 100%;
+  height: auto;
+}
+</style>
+<div class="responsive" align="center" style="background-color:rgba(255, 99, 71, 0.2)"style="max-width: 30rem;">
+
+<br>
+
+                  <img class="mySlides" src="{% static 'image/blood.svg' %}" class="responsive" width="800" height="200" align="center" style="max-width: 30rem">
+                  <img class="mySlides" src="{% static 'image/d1.png' %}"  class="responsive" width="800" height="200" align="center" style="max-width: 30rem">
+                  <img class="mySlides" src="{% static 'image/d2.jpeg' %}" class="responsive" width="800" height="200"  align="center" style="max-width: 30rem;">
+<br>
+</div>
+
+         <script>
+                        var myIndex = 0;
+                        carousel();
+
+                        function carousel() {
+                          var i;
+                          var x = document.getElementsByClassName("mySlides");
+                          for (i = 0; i < x.length; i++) {
+                            x[i].style.display = "none";
+                          }
+                          myIndex++;
+                          if (myIndex > x.length) {myIndex = 1}
+                          x[myIndex-1].style.display = "block";
+                          setTimeout(carousel, 3000); // Change image every 2 seconds
+                        }
+            </script>
+
+
+
+
+
+
+<script>
+function openNav() {
+  document.getElementById("myNav").style.height = "100%";
+}
+
+function closeNav() {
+  document.getElementById("myNav").style.height = "0%";
+}
+</script>
+
+
+
+<main style="max-width: 30rem" align="center">
+<h1 align="center" >Welcome, {{ request.session.username }}!</h1>
 {% if donations %}
     <!-- Donations Table -->
-    <h2>Donations</h2>
+    <h2 border="200" >Donations</h2>
     <table style="width:50%">
-        <thead>
+        <thead align="center">
             <tr>
                 <th>Blood Bank</th>
                 <th>Donation Date</th>
             </tr>     
         </thead>
-        <tbody>
+        <tbody align="center">
             {% for donation in donations %}
                 <tr>
                     <td>{{ donation.blood_bank }}</td>
@@ -60,7 +114,7 @@
     <!-- Pagination -->
     <ul>
         {% if donations.has_previous %}
-           <li><a href="?lists_page=1">&laquo;</a></li>
+           <li ><a href="?lists_page=1">&laquo;</a></li>
            <li><a href="?lists_page={{ donations.previous_page_number }}">Prev</a></li>
         {% endif %}
         {% if donations.has_next %}
@@ -68,7 +122,9 @@
            <li><a href="?lists_page={{ donations.paginator.num_pages }}">&raquo;</a></li>
         {% endif %}
      </ul>
+    <br>
+    <br>
 {% else %}
-    <p>No donations made.</p>
+    <p align="center">No donations made.</p>
 {% endif %}
 </main>

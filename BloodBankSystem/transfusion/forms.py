@@ -9,9 +9,11 @@ class DateInput(forms.DateInput):
 
 class TransfusionForm(ModelForm):
     # only include hospitals with blood supply in the choices
-    hospital = forms.ModelChoiceField(widget=forms.Select(), queryset=Hospital.objects.only('user_id').exclude(blood_supply_id=None))
-    transfusion_date = forms.DateField(widget=DateInput())
-    requested_blood_type = forms.ChoiceField(widget=forms.Select())
+    hospital = forms.ModelChoiceField(label='Hospital',
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        queryset=Hospital.objects.only('user_id').exclude(blood_supply_id=None))
+    transfusion_date = forms.DateField(label='Transfusion Date',widget=DateInput(attrs={'class': 'form-control'}))
+    requested_blood_type = forms.ChoiceField(label='Blood Type',widget=forms.Select(attrs={'class': 'form-control'}))
 
     class Meta:
         model = Transfusion
