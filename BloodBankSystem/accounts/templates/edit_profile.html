@@ -16,11 +16,11 @@ Edit Profile
             <ul class="navbar-nav me-auto">
                {% if request.session.type == 'D' %}
                   <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'accounts:index' %}">Home</a></li>
-                  <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'donation:index' %}">Add Donation</a></li>
+                  <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'donation:index' %}">Donate</a></li>
 
                {% elif request.session.type == 'R' %}
                   <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'accounts:index' %}">Home</a></li>
-                  <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'transfusion:index' %}">Add Transfusion</a></li>
+                  <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'transfusion:index' %}">Request Transfusion</a></li>
                {% elif request.session.type == 'H' %}
                   <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'accounts:index' %}">Home</a></li>
                   <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'request:request_blood_supply' %}">Request Blood Supply</a></li>
