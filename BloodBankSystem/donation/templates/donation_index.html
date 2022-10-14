@@ -52,12 +52,12 @@ Add Donation
             <h2 align="left" class="mb-3">Donate</h2>
                          <form method="post" enctype="multipart/form-data" class="row justify-content-center">
                             {% csrf_token %}
-                         <div class="mt">
+                         <div class="mt-2">
                               {{ form.blood_bank.label_tag }}
                               {{ form.blood_bank}}
                               <small class="text-primary">{{ form.blood_bank.errors | striptags }}</small>
                          </div>
-                         <div class="mt">
+                         <div class="mt-2">
                               {{ form.donation_date.label_tag }}
                               {{ form.donation_date }}
                               <small class="text-primary">{{ form.donation_date.errors | striptags }}</small>
