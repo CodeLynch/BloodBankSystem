@@ -85,17 +85,17 @@ Add Transfusion
             </table>
             <form method="post" enctype="multipart/form-data" class="row justify-content-center">
                {% csrf_token %}
-               <div class="mt">
+               <div class="mt-2">
                   {{ form.hospital.label_tag }}
                   {{ form.hospital }}
                   <small class="text-primary">{{ form.hospital.errors | striptags }}</small>
                </div>
-               <div class="mt">
+               <div class="mt-2">
                   {{ form.transfusion_date.label_tag }}
                   {{ form.transfusion_date }}
                   <small class="text-primary">{{ form.transfusion_date.errors | striptags }}</small>
                </div>
-               <div class="mt">
+               <div class="mt-2">
                   {{ form.requested_blood_type.label_tag }}
                   {{ form.requested_blood_type }}
                   <small class="text-primary">{{ form.requested_blood_type.errors | striptags }}</small>
