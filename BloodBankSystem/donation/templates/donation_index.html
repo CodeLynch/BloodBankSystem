@@ -6,14 +6,14 @@ Add Donation
 {% block content %}
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
- <div class="container">
-           <a href="#" class="navbar-brand">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a href="{% url 'accounts:index' %}" class="navbar-brand">
             {% load static %}
-            <img src="{% static 'accounts/static/image/blood.svg' %}" alt="" width="30" height="30">
-            <strong>BrandName</strong>
+            <img src="{% static 'image/blood.svg' %}" alt="" width="30" height="30">
+            <strong>OneBlood</strong>
         </a>
-
+        
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -23,12 +23,13 @@ Add Donation
                     {{ user_image }}
                     <strong class="ms-2"> {{ request.session.first_name|capfirst }} {{ request.session.last_name|capfirst }}</strong>
                 </li> <!-- small screen only -->
-                <li class="nav-item"><a class="nav-link active" href="{% url 'accounts:index' %}">Donations</a></li>
-                <li class="nav-item d-block d-lg-none active"><a class="nav-link" href="{% url 'donation:index' %}">Add Donation</a></li><!-- small screen only -->
+                <li class="nav-item"><a class="nav-link" href="{% url 'accounts:index' %}">Home</a></li>
+                <li class="nav-item"><a class="nav-link active" href="{% url 'donation:index' %}">Add Donation</a></li>
+                <li class="nav-item d-block d-lg-none"><a class="nav-link" href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li> <!-- small screen only -->
                 <li class="nav-item d-block d-lg-none"><a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a></li> <!-- small screen only -->
             </ul>
             <!-- large screen only -->
-            <div class="dropdown d-none d-lg-block">
+            <div class="dropdown d-none d-lg-block"> 
                 <a class="nav-link dropdown-toggle justify-content-between" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                     <strong class="me-2"> {{ request.session.first_name|capfirst }} {{ request.session.last_name|capfirst }}</strong>
                     {{ user_image }}
@@ -46,7 +47,6 @@ Add Donation
 
 
 <div class="container">
-
         <div class="container2" align="center" >
             <h1 class="p-3" >Add Blood Donation</h1>
             <div class="card border-primary shadow p-3 mb-5 bg-white rounded" style="max-width: 30rem;" align="left" >
@@ -60,8 +60,6 @@ Add Donation
                     </div>
                 </div>
         </div>
- <br>
-    <br>
 </div>
 
 
