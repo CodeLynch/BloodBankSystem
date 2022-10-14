@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 from django.contrib import messages
-from accounts.models import Donation, BloodBank, Donor, BloodSupply
+from accounts.models import Donation, BloodBank, Donor, BloodSupply, User
 from donation.forms import DonationForm
 from django.db import IntegrityError
 
@@ -11,9 +11,10 @@ class DonationView(View):
     template = 'donation_index.html'
 
     def get(self, request):
+        user = User.objects.get(username=request.session['username'])
         form = DonationForm()
         blood_banks = BloodBank.objects.exclude(blood_supply_id=None)
-        return render(request, self.template, {'form': form, 'blood_banks': blood_banks})
+        return render(request, self.template, {'form': form, 'blood_banks': blood_banks, 'user_image': user.image_tag})
 
     def post(self, request):
         form = DonationForm(request.POST)
