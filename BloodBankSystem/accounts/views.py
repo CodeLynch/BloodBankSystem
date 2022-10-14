@@ -171,6 +171,7 @@ class EditProfileView(View):
                             individual = Individual.objects.get(username=user.username)
                             request.session['first_name'] = individual.first_name
                             request.session['last_name'] = individual.last_name
+                            request.session['blood_type'] = individual.blood_type
                         elif user.type == 'O':
                             org = Organization.objects.get(username=user.username)
                             request.session['name'] = org.name
