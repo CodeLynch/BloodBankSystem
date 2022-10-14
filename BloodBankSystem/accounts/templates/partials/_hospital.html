@@ -10,16 +10,13 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="navbar-collapse collapse show justify-content-between" id="navbarColor03">
-    <!-- {{ user_image }}
-    <a href="{% url 'accounts:index' %}">
-        Hospital: {{ request.session.name }}
-    </a> -->
+    
             <ul class="navbar-nav">
                 <li class="nav-item d-block d-lg-none">
                     {{ user_image }}
                     <strong class="ms-2"> Hospital: {{ request.session.name }} </strong>
                 </li>
-                <li class="nav-item"><a class="nav-link active" href="{% url 'accounts:index' %}">Pending Requests and Transfusions</a></li>
+                <li class="nav-item"><a class="nav-link active" href="{% url 'accounts:index' %}">Home</a></li>
                 {% if request.session.blood_supply_id == None %}
                 <li class="nav-item"><a class="text-decoration-none nav-link " href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
                 {% else %}
@@ -32,7 +29,7 @@
 
             <div class="dropdown d-none d-lg-block">
                 <a class="nav-link dropdown-toggle justify-content-between" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                    <strong class="me-2"> Hospital: {{ request.session.name }} </strong>
+                    <strong class="me-2"> {{ request.session.name }} </strong>
                     {{ user_image }}
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
@@ -45,11 +42,10 @@
 </nav>
 
 <main class="container">
-<h1 align="left" >Welcome, {{ request.session.username }}!</h1>
+    <h2 class="p-2">Transfusions</h2>
 
 {% if transfusions %}
     <!-- Transfusions Table -->
-    <h2 border="200">Transfusions</h2>
     <table style="width:70%" class="table table-hover shadow-sm p-3 mb-5 bg-white rounded" align="center">
         <thead>
             <tr class="table-primary" align="center">
@@ -79,23 +75,25 @@
         </tbody>
     </table>
     <!-- Pagination -->
-    <ul>
-        {% if transfusions.has_previous %}
-           <li><a href="?lists_page=1">&laquo;</a></li>
-           <li><a href="?lists_page={{ transfusions.previous_page_number }}">Prev</a></li>
-        {% endif %}
-        {% if transfusions.has_next %}
-           <li><a href="?lists_page={{ transfusions.next_page_number }}">Next</a></li>
-           <li><a href="?lists_page={{ transfusions.paginator.num_pages }}">&raquo;</a></li>
-        {% endif %}
-    </ul>
+    <div class="d-flex">
+        <ul class="pagination list-inline mx-auto justify-content-center">
+            {% if transfusions.has_previous %}
+            <li class="page-item"><a class="page-link" href="?lists_page=1">&laquo;</a></li>
+            <li class="page-item"><a class="page-link" href="?lists_page={{ transfusions.previous_page_number }}">Prev</a></li>
+            {% endif %}
+            {% if transfusions.has_next %}
+            <li class="page-item"><a class="page-link" href="?lists_page={{ transfusions.next_page_number }}">Next</a></li>
+            <li class="page-item"><a class="page-link" href="?lists_page={{ transfusions.paginator.num_pages }}">&raquo;</a></li>
+            {% endif %}
+        </ul>
+</div>
 {% else %}
-    <p>No pending transfusions.</p>
+    <p class="alert alert-warning" align="center">No pending transfusions.</p>
 {% endif %}
 
+<h2>Requests</h2>
 {% if requests %}
     <!-- Requests Table -->
-    <h2>Requests</h2>
     <table style="width:70%" class="table table-hover shadow-sm p-3 mb-5 bg-white rounded" align="center">
         <thead>
             <tr class="table-primary" align="center">
@@ -119,17 +117,19 @@
         </tbody>
     </table>
     <!-- Pagination -->
-    <ul>
-        {% if requests.has_previous %}
-           <li><a href="?requests_page=1">&laquo;</a></li>
-           <li><a href="?requests_page={{ requests.previous_page_number }}">Prev</a></li>
-        {% endif %}
-        {% if requests.has_next %}
-           <li><a href="?requests_page={{ requests.next_page_number }}">Next</a></li>
-           <li><a href="?requests_page={{ requests.paginator.num_pages }}">&raquo;</a></li>
-        {% endif %}
-    </ul>
+    <div class="d-flex">
+        <ul class="pagination list-inline mx-auto justify-content-center">
+            {% if requests.has_previous %}
+            <li class="page-item"><a class="page-link" href="?requests_page=1">&laquo;</a></li>
+            <li class="page-item"><a class="page-link" href="?requests_page={{ requests.previous_page_number }}">Prev</a></li>
+            {% endif %}
+            {% if requests.has_next %}
+            <li class="page-item"><a class="page-link" href="?requests_page={{ requests.next_page_number }}">Next</a></li>
+            <li class="page-item"><a class="page-link" href="?requests_page={{ requests.paginator.num_pages }}">&raquo;</a></li>
+            {% endif %}
+        </ul>
+    </div>
 {% else %}
-    <p>No pending requests.</p>
+    <p class="alert alert-warning" align="center">No pending requests.</p>
 {% endif %}
 </main>

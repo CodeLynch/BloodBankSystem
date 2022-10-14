@@ -9,12 +9,13 @@ class RequestBloodSupplyView(View):
     template = 'request_blood_supply.html'
 
     def get(self, request):
+        user = User.objects.get(username=request.session['username'])
         if 'username' not in request.session:
             return redirect(reverse('accounts:login'))
         else:
             form = RequestBloodSupplyForm
             blood_banks = BloodBank.objects.exclude(blood_supply_id=None)
-            return render(request, self.template, {'form': form, 'blood_banks': blood_banks})
+            return render(request, self.template, {'form': form, 'blood_banks': blood_banks, 'user_image': user.image_tag})
 
     def post(self, request):
         form = RequestBloodSupplyForm(request.POST)

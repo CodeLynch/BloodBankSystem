@@ -23,12 +23,12 @@ Request Blood Supply
                     {{ user_image }}
                     <strong class="ms-2"> Hospital: {{ request.session.name }} </strong>
                 </li>
-                <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'accounts:index' %}">Pending Requests and Transfusions</a></li>
+                <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'accounts:index' %}">Home</a></li>
                 {% if request.session.blood_supply_id == None %}
                 <li class="nav-item"><a class="text-decoration-none nav-link" href="{% url 'storage:create_blood_supply' %}">Create Blood Supply</a></li>
                 {% else %}
                 <li class="nav-item"><a class="text-decoration-none nav-link active " href="{% url 'request:request_blood_supply' %}">Request Blood Supply</a></li>
-                <li class="nav-item"><a class="text-decoration-none nav-link active " href="{% url 'storage:update_blood_supply' %}">Update Blood Supply</a></li>
+                <li class="nav-item"><a class="text-decoration-none nav-link " href="{% url 'storage:update_blood_supply' %}">Update Blood Supply</a></li>
                 {% endif %}
                 <li class="nav-item d-block d-lg-none"><a class="nav-link" href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
                 <li class="nav-item d-block d-lg-none"><a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a></li>
@@ -36,7 +36,7 @@ Request Blood Supply
 
             <div class="dropdown d-none d-lg-block">
                 <a class="nav-link dropdown-toggle justify-content-between" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                    <strong class="me-2"> Hospital: {{ request.session.name }} </strong>
+                    <strong class="me-2"> {{ request.session.name }} </strong>
                     {{ user_image }}
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
@@ -50,51 +50,53 @@ Request Blood Supply
 </nav>
  
  <!-- Main -->
-<div class="container">
-    <h1>Request Blood Supply</h1>
-    <div class="container" align="center">
-        <div class="card border-primary shadow p-3 mb-5 bg-white rounded" style="max-width: 50rem;" align="left">
-            <table class="table table-striped" style="width:100%" border="5" align="center">
-                <thead>
-                    <tr align="center">
-                        <th scope="col">Blood Bank</th>
-                        <th scope="col">A+ amount</th>
-                        <th scope="col">A- amount</th>
-                        <th scope="col">B+ amount</th>
-                        <th scope="col">B- amount</th>
-                        <th scope="col">AB+ amount</th>
-                        <th scope="col">AB- amount</th>
-                        <th scope="col">O+ amount</th>
-                        <th scope="col">O- amount</th>
-                    </tr>
-                </thead>
+<main class="container py-4">
+    <div class="container">
+        <h1>Request Blood Supply</h1>
+        <div class="container" align="center">
+            <div class="col-lg-8 shadow rounded px-5 py-5 row justify-content-center text-start"">
+                <table style="width:50%" class="table table-hover">
+                    <thead>
+                        <tr align="center" class="table-dark">
+                            <th scope="col">Blood Bank</th>
+                            <th scope="col">A+ amount</th>
+                            <th scope="col">A- amount</th>
+                            <th scope="col">B+ amount</th>
+                            <th scope="col">B- amount</th>
+                            <th scope="col">AB+ amount</th>
+                            <th scope="col">AB- amount</th>
+                            <th scope="col">O+ amount</th>
+                            <th scope="col">O- amount</th>
+                        </tr>
+                    </thead>
 
-                <tbody align="center">
-                {% for bank in blood_banks %}
-                    <tr>
-                        <td>{{ bank.name }}</td>
-                        <td>{{ bank.blood_supply.aplus_amount }}</td>
-                        <td>{{ bank.blood_supply.amin_amount }}</td>
-                        <td>{{ bank.blood_supply.bplus_amount }}</td>
-                        <td>{{ bank.blood_supply.bmin_amount }}</td>
-                        <td>{{ bank.blood_supply.abplus_amount }}</td>
-                        <td>{{ bank.blood_supply.abmin_amount }}</td>
-                        <td>{{ bank.blood_supply.oplus_amount }}</td>
-                        <td>{{ bank.blood_supply.omin_amount }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table> 
-            
-            <div class="card-body">
-                <form method="POST" class="form-group">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button class="btn btn-secondary btn-sm" type="submit">Request</button>
-                </form>
-            
+                    <tbody align="center">
+                    {% for bank in blood_banks %}
+                        <tr>
+                            <td>{{ bank.name }}</td>
+                            <td>{{ bank.blood_supply.aplus_amount }}</td>
+                            <td>{{ bank.blood_supply.amin_amount }}</td>
+                            <td>{{ bank.blood_supply.bplus_amount }}</td>
+                            <td>{{ bank.blood_supply.bmin_amount }}</td>
+                            <td>{{ bank.blood_supply.abplus_amount }}</td>
+                            <td>{{ bank.blood_supply.abmin_amount }}</td>
+                            <td>{{ bank.blood_supply.oplus_amount }}</td>
+                            <td>{{ bank.blood_supply.omin_amount }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table> 
+                
+                    <form method="POST" class="form-group">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button class="btn btn-primary btn-sm" type="submit">Request</button>
+                    </form>
+                
             </div>
         </div>
     </div>
-</div>
+
+</main>
+
 {% endblock %}
