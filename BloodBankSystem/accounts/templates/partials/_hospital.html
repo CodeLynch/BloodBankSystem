@@ -41,12 +41,11 @@
     </div>
 </nav>
 
-<main class="container">
-    <div class="mt-4" align="center">
-        <div class="col-lg-8 shadow rounded px-5 py-5 row justify-content-center">
-
-            <h2 align="left" class="mb-3">Transfusions</h2>
+<main class="container py-5">
+    <div class ="container" align="center">
+        <div class="col-lg-8 shadow rounded px-5 py-5 row justify-content-center text-start">
             {% if transfusions %}
+            <h2 align="left" class="mb-3">Transfusions</h2>
                 <!-- Transfusions Table -->
                 <table class="table table-hover">
                     <thead>
@@ -88,17 +87,17 @@
                         <li class="page-item"><a class="page-link" href="?lists_page={{ transfusions.paginator.num_pages }}">&raquo;</a></li>
                         {% endif %}
                     </ul>
-            </div>
+                </div>
             {% else %}
-                <p class="alert alert-warning" align="center">No pending transfusions.</p>
+                    <p class="alert alert-warning" align="center">No pending transfusions.</p>
             {% endif %}
         </div> 
     </div>
 
-    <div class="mt-4" align="center">
-        <div class="col-lg-8 shadow rounded px-5 py-5 row justify-content-center">
-            <h2 align="left" class="mb-3">Requests</h2>
+    <div class="container mt-4" align="center">
+        <div class="col-lg-8 shadow rounded px-5 py-5 row justify-content-center text-start">
             {% if requests %}
+            <h2 align="left" class="mb-3">Requests</h2>
                 <!-- Requests Table -->
                 <table class="table table-hover">
                     <thead>
