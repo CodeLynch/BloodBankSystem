@@ -58,7 +58,7 @@ Edit Profile
     </div>
  </nav>
 
- <!-- Main -->
+
 <!-- 
 <div class="container">
     <h1>Edit Profile</h1>
@@ -67,7 +67,7 @@ Edit Profile
             <div class="card-body">
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                        <div class="form-check">
+                    <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="remove_user_image" name="remove_user_image" id="remove_user_image">
                         <label class="form-check-label">Remove profile pic</label>
                     </div>
@@ -80,6 +80,7 @@ Edit Profile
 </div> 
 -->
 
+ <!-- Main -->
 <main class="container py-5">
     <div class="row justify-content-center">
         <!-- organization registration -->
@@ -88,6 +89,12 @@ Edit Profile
             <h1 class="mb-3">Edit Profile</h1>
             <form method="post" enctype="multipart/form-data" class="row justify-content-center">
                 {% csrf_token %}
+                <div class="col-lg-12">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="remove_user_image" name="remove_user_image" id="remove_user_image">
+                        <label class="form-check-label">Remove profile pic</label>
+                    </div>
+                </div>
                 <div class="col-lg-6">
                     <div class="mt-2">
                         {{ form.user_image.label_tag }}
@@ -134,6 +141,12 @@ Edit Profile
             <h1 class="mb-3">Edit Profile</h1>
             <form method="post" enctype="multipart/form-data" class="row justify-content-center">
                 {% csrf_token %}
+                <div class="col-lg-12">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="remove_user_image" name="remove_user_image" id="remove_user_image">
+                        <label class="form-check-label">Remove profile pic</label>
+                    </div>
+                </div>
                 <div class="col-lg-6">
                     <div class="mt-2">
                         {{ form.user_image.label_tag }}
