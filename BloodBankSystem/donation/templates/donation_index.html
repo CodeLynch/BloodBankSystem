@@ -46,21 +46,26 @@ Add Donation
 
 
 
-<div class="container">
+<main class="container py-4">
+
         <div class="container2" align="center" >
             <h1 class="p-3" >Add Blood Donation</h1>
-            <div class="card border-primary shadow p-3 mb-5 bg-white rounded" style="max-width: 30rem;" align="left" >
-                    <div class="card-body">
-                        <form method="post" enctype="multipart/form-data">
+            <div class="col-lg-8 shadow rounded px-5 py-5 row justify-content-center" style="max-width: 30rem;" align="left" >
+
+                         <form method="post" enctype="multipart/form-data" class="row justify-content-center">
                             {% csrf_token %}
-                            </div>
+                             <div class="mt">
+
+                             </div>
+
                             {{form.as_p}}
-                            <button type="submit" class="btn btn-secondary btn-sm" >Save</button>
-                        </form>
+                                <div class="col-lg-4">
+                                      <button type="submit" class="btn btn-primary mt-4 form-control">Save</button>
+                                </div>
+                         </form>
                     </div>
-                </div>
-        </div>
-</div>
+            </div>
+</main>
 
 
 

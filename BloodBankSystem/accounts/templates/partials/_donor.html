@@ -90,41 +90,51 @@ function closeNav() {
 
 
 
-<main style="max-width: 30rem" align="center">
-<h1 align="center" >Welcome, {{ request.session.username }}!</h1>
-{% if donations %}
-    <!-- Donations Table -->
-    <h2 border="200" >Donations</h2>
-    <table style="width:50%">
-        <thead align="center">
-            <tr>
-                <th>Blood Bank</th>
-                <th>Donation Date</th>
-            </tr>     
-        </thead>
-        <tbody align="center">
-            {% for donation in donations %}
-                <tr>
-                    <td>{{ donation.blood_bank }}</td>
-                    <td>{{ donation.donation_date }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <!-- Pagination -->
-    <ul>
-        {% if donations.has_previous %}
-           <li ><a href="?lists_page=1">&laquo;</a></li>
-           <li><a href="?lists_page={{ donations.previous_page_number }}">Prev</a></li>
-        {% endif %}
-        {% if donations.has_next %}
-           <li><a href="?lists_page={{ donations.next_page_number }}">Next</a></li>
-           <li><a href="?lists_page={{ donations.paginator.num_pages }}">&raquo;</a></li>
-        {% endif %}
-     </ul>
-    <br>
-    <br>
-{% else %}
-    <p align="center">No donations made.</p>
-{% endif %}
+<main class="container py-4">
+    <h1 align="center" >Welcome, {{ request.session.username }}!</h1>
+     <div class="mt-4" align="center">
+        <div class="col-lg-8 shadow rounded px-5 py-5 row justify-content-center">
+
+                {% if donations %}
+                    <!-- Donations Table -->
+                    <h2>Donations</h2>
+                    <table  class="table table-hover">
+                        <thead>
+                            <tr align="center" class="table-dark">
+                                <th>Blood Bank</th>
+                                <th>Donation Date</th>
+                            </tr>
+                        </thead>
+                        <tbody align="center">
+                            {% for donation in donations %}
+                                <tr align="center">
+                                    <td>{{ donation.blood_bank }}</td>
+                                    <td>{{ donation.donation_date }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <!-- Pagination -->
+
+                        <div class="col-lg-2 mt-4">
+                         <ul class="pagination">
+                        {% if donations.has_previous %}
+                           <li ><a href="?lists_page=1">&laquo;</a></li>
+                           <li><a href="?lists_page={{ donations.previous_page_number }}">Prev</a></li>
+                        {% endif %}
+                        {% if donations.has_next %}
+                           <li><a href="?lists_page={{ donations.next_page_number }}">Next</a></li>
+                           <li><a href="?lists_page={{ donations.paginator.num_pages }}">&raquo;</a></li>
+                        {% endif %}
+                     </ul>
+                        </div>
+                    <br>
+                    <br>
+                {% else %}
+            <div class="alert alert-warning">
+                    <p align="center">No donations made.</p>
+                  </div>
+                {% endif %}
+        </div>
+     </div>
 </main>
