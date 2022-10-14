@@ -89,9 +89,13 @@
                     </div>
             </div>
     </div>
-{% else %}
-    <p class="alert alert-warning" align="center">No pending donations.</p>
-{% endif %}
+    {% else %}
+    <div class ="container" align="center">
+        <div class="col-lg-8 shadow rounded px-5 py-5 row justify-content-center text-start">
+            <p class="alert alert-warning" align="center">No pending donations.</p>
+        </div>
+    </div>
+    {% endif %}
 
 {% if requests %}
     <!-- Requests Table -->
@@ -141,9 +145,14 @@
                             {% endif %}
                         </ul>
                     </div>
+
             </div>
     </div>
-{% else %}
-    <p class="alert alert-warning" align="center">No pending requests.</p>
-{% endif %}
+    {% else %}
+    <div class ="container p-3" align="center">
+        <div class="col-lg-8 shadow rounded px-5 py-5 row justify-content-center text-start">
+                <p class="alert alert-warning" align="center">No pending requests.</p>
+        </div>
+    </div>
+     {% endif %}
 </main>
