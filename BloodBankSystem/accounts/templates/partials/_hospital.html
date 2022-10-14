@@ -42,94 +42,102 @@
 </nav>
 
 <main class="container">
-    <h2 class="p-2">Transfusions</h2>
+    <div class="mt-4" align="center">
+        <div class="col-lg-8 shadow rounded px-5 py-5 row justify-content-center">
 
-{% if transfusions %}
-    <!-- Transfusions Table -->
-    <table style="width:70%" class="table table-hover shadow-sm p-3 mb-5 bg-white rounded" align="center">
-        <thead>
-            <tr class="table-primary" align="center">
-                <th>Recipient</th>
-                <th>Transfusion Date</th>
-                <th>Status</th>
-                <th>Requested Blood Type</th>
-                <th>Response</th>
-            </tr>     
-        </thead>
-        <tbody align="center">
-            {% for transfusion in transfusions %}
-                <tr>
-                    <td>{{ transfusion.recipient }}</td>
-                    <td>{{ transfusion.transfusion_date }}</td>
-                    <td>{{ transfusion.status }}</td>
-                    <td>{{ transfusion.requested_blood_type }}</td>
-                    <td>
-                        <form action="{% url 'transfusion:update_transfusion' transfusion.id %}" method="POST">
-                            {% csrf_token %}
-                            <input class="btn btn-outline-success" type="submit" name="A" value="ACCEPT">
-                            <input class="btn btn-outline-primary" type="submit" name="D" value="DECLINE">
-                         </form>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <!-- Pagination -->
-    <div class="d-flex">
-        <ul class="pagination list-inline mx-auto justify-content-center">
-            {% if transfusions.has_previous %}
-            <li class="page-item"><a class="page-link" href="?lists_page=1">&laquo;</a></li>
-            <li class="page-item"><a class="page-link" href="?lists_page={{ transfusions.previous_page_number }}">Prev</a></li>
+            <h2 align="left" class="mb-3">Transfusions</h2>
+            {% if transfusions %}
+                <!-- Transfusions Table -->
+                <table class="table table-hover">
+                    <thead>
+                        <tr align="center" class="table-dark">
+                            <th>Recipient</th>
+                            <th>Transfusion Date</th>
+                            <th>Status</th>
+                            <th>Requested Blood Type</th>
+                            <th>Response</th>
+                        </tr>     
+                    </thead>
+                    <tbody align="center">
+                        {% for transfusion in transfusions %}
+                            <tr>
+                                <td>{{ transfusion.recipient }}</td>
+                                <td>{{ transfusion.transfusion_date }}</td>
+                                <td>{{ transfusion.status }}</td>
+                                <td>{{ transfusion.requested_blood_type }}</td>
+                                <td>
+                                    <form action="{% url 'transfusion:update_transfusion' transfusion.id %}" method="POST">
+                                        {% csrf_token %}
+                                        <input class="btn btn-outline-success" type="submit" name="A" value="ACCEPT">
+                                        <input class="btn btn-outline-primary" type="submit" name="D" value="DECLINE">
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <!-- Pagination -->
+                <div class="d-flex">
+                    <ul class="pagination list-inline mx-auto justify-content-center">
+                        {% if transfusions.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?lists_page=1">&laquo;</a></li>
+                        <li class="page-item"><a class="page-link" href="?lists_page={{ transfusions.previous_page_number }}">Prev</a></li>
+                        {% endif %}
+                        {% if transfusions.has_next %}
+                        <li class="page-item"><a class="page-link" href="?lists_page={{ transfusions.next_page_number }}">Next</a></li>
+                        <li class="page-item"><a class="page-link" href="?lists_page={{ transfusions.paginator.num_pages }}">&raquo;</a></li>
+                        {% endif %}
+                    </ul>
+            </div>
+            {% else %}
+                <p class="alert alert-warning" align="center">No pending transfusions.</p>
             {% endif %}
-            {% if transfusions.has_next %}
-            <li class="page-item"><a class="page-link" href="?lists_page={{ transfusions.next_page_number }}">Next</a></li>
-            <li class="page-item"><a class="page-link" href="?lists_page={{ transfusions.paginator.num_pages }}">&raquo;</a></li>
-            {% endif %}
-        </ul>
-</div>
-{% else %}
-    <p class="alert alert-warning" align="center">No pending transfusions.</p>
-{% endif %}
-
-<h2>Requests</h2>
-{% if requests %}
-    <!-- Requests Table -->
-    <table style="width:70%" class="table table-hover shadow-sm p-3 mb-5 bg-white rounded" align="center">
-        <thead>
-            <tr class="table-primary" align="center">
-                <th>Blood Bank</th>
-                <th>Request Date</th>
-                <th>Blood Type</th>
-                <th>Quantity</th>
-                <th>Status</th>
-            </tr>     
-        </thead>
-        <tbody align="center">
-            {% for request in requests %}
-                <tr>
-                    <td>{{ request.blood_bank }}</td>
-                    <td>{{ request.request_date }}</td>
-                    <td>{{ request.blood_type }}</td>
-                    <td>{{ request.quantity }}</td>
-                    <td>{{ request.status }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <!-- Pagination -->
-    <div class="d-flex">
-        <ul class="pagination list-inline mx-auto justify-content-center">
-            {% if requests.has_previous %}
-            <li class="page-item"><a class="page-link" href="?requests_page=1">&laquo;</a></li>
-            <li class="page-item"><a class="page-link" href="?requests_page={{ requests.previous_page_number }}">Prev</a></li>
-            {% endif %}
-            {% if requests.has_next %}
-            <li class="page-item"><a class="page-link" href="?requests_page={{ requests.next_page_number }}">Next</a></li>
-            <li class="page-item"><a class="page-link" href="?requests_page={{ requests.paginator.num_pages }}">&raquo;</a></li>
-            {% endif %}
-        </ul>
+        </div> 
     </div>
-{% else %}
-    <p class="alert alert-warning" align="center">No pending requests.</p>
-{% endif %}
+
+    <div class="mt-4" align="center">
+        <div class="col-lg-8 shadow rounded px-5 py-5 row justify-content-center">
+            <h2 align="left" class="mb-3">Requests</h2>
+            {% if requests %}
+                <!-- Requests Table -->
+                <table class="table table-hover">
+                    <thead>
+                        <tr align="center" class="table-dark">
+                            <th>Blood Bank</th>
+                            <th>Request Date</th>
+                            <th>Blood Type</th>
+                            <th>Quantity</th>
+                            <th>Status</th>
+                        </tr>     
+                    </thead>
+                    <tbody align="center">
+                        {% for request in requests %}
+                            <tr>
+                                <td>{{ request.blood_bank }}</td>
+                                <td>{{ request.request_date }}</td>
+                                <td>{{ request.blood_type }}</td>
+                                <td>{{ request.quantity }}</td>
+                                <td>{{ request.status }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <!-- Pagination -->
+                <div class="d-flex">
+                    <ul class="pagination list-inline mx-auto justify-content-center">
+                        {% if requests.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?requests_page=1">&laquo;</a></li>
+                        <li class="page-item"><a class="page-link" href="?requests_page={{ requests.previous_page_number }}">Prev</a></li>
+                        {% endif %}
+                        {% if requests.has_next %}
+                        <li class="page-item"><a class="page-link" href="?requests_page={{ requests.next_page_number }}">Next</a></li>
+                        <li class="page-item"><a class="page-link" href="?requests_page={{ requests.paginator.num_pages }}">&raquo;</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            {% else %}
+                <p class="alert alert-warning" align="center">No pending requests.</p>
+            {% endif %}
+        </div>
+    </div>
 </main>
