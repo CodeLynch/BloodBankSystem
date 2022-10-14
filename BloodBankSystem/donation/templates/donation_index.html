@@ -46,19 +46,23 @@ Add Donation
 
 
 
-<main class="container py-4">
-
-        <div class="container2" align="center" >
-            <h1 class="p-3" >Add Blood Donation</h1>
-            <div class="col-lg-8 shadow rounded px-5 py-5 row justify-content-center" style="max-width: 30rem;" align="left" >
-
+<main class="container py-5">
+      <div class="row justify-content-center">
+         <div class="col-lg-8 shadow rounded px-5 py-5">
+            <h2 align="left" class="mb-3">Add Donation</h2>
                          <form method="post" enctype="multipart/form-data" class="row justify-content-center">
                             {% csrf_token %}
-                             <div class="mt">
+                         <div class="mt">
+                              {{ form.blood_bank.label_tag }}
+                              {{ form.blood_bank}}
+                              <small class="text-primary">{{ form.blood_bank.errors | striptags }}</small>
+                         </div>
+                         <div class="mt">
+                              {{ form.donation_date.label_tag }}
+                              {{ form.donation_date }}
+                              <small class="text-primary">{{ form.donation_date.errors | striptags }}</small>
+                         </div>
 
-                             </div>
-
-                            {{form.as_p}}
                                 <div class="col-lg-4">
                                       <button type="submit" class="btn btn-primary mt-4 form-control">Save</button>
                                 </div>

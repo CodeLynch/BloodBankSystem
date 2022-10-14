@@ -8,9 +8,13 @@ class DateInput(forms.DateInput):
     
 
 class DonationForm(ModelForm):
+
     #choices only include blood banks with blood supply
-    blood_bank = forms.ModelChoiceField(widget=forms.Select(), queryset=BloodBank.objects.only('user_id').exclude(blood_supply_id=None))
-    donation_date = forms.DateField(widget=DateInput())
+
+    blood_bank = forms.ModelChoiceField(label='Blood Bank',
+                                        widget=forms.Select(attrs={'class': 'form-control'}),
+                                        queryset=BloodBank.objects.only('user_id').exclude(blood_supply_id=None))
+    donation_date = forms.DateField(label='Donation Date',widget=DateInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = Donation
