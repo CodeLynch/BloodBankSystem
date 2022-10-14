@@ -10,91 +10,106 @@ Add Transfusion
    <div class="container">
       <a href="{% url 'accounts:index' %}" class="navbar-brand">
          {% load static %}
-            <img src="{% static 'image/blood.svg' %}" alt="" width="30" height="30">
-            <strong>BrandName</strong>
+         <img src="{% static 'image/blood.svg' %}" alt="" width="30" height="30">
+         <strong>OneBlood</strong>
       </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-collapse collapse" id="navbarColor03">
+         <ul class="navbar-nav me-auto">
+            <li class="nav-item d-block d-lg-none">
+               {{ user_image }}
+               <strong class="ms-2">{{ request.session.name }}</strong>
+            </li>
+            <li class="nav-item">
+               <a class="text-decoration-none nav-link" href="{% url 'accounts:index' %}">Home</a>
+            </li>
+            <li class="nav-item">
+               <a class="text-decoration-none nav-link active" href="{% url 'transfusion:index' %}">Request Transfusion</a>
+            </li>
+            <li class="nav-item d-block d-lg-none"><a class="nav-link" href="{% url 'accounts:edit_profile' %}">Edit Profile</a></li>
+            <li class="nav-item d-block d-lg-none"><a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a></li>
+         </ul>
 
-      <ul class="navbar-nav me-auto">
-         <li class="nav-item">
-            <a class="text-decoration-none nav-link" href="{% url 'accounts:index' %}">Home</a>
-         </li>
-         <li class="nav-item">
-            <a class="text-decoration-none nav-link active" href="{% url 'transfusion:index' %}">Request Transfusion</a>
-         </li>
-      </ul>
-      <div class="dropdown d-none d-lg-block">
-         <a class="nav-link dropdown-toggle justify-content-between" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" 
-         aria-expanded="false">
-         <strong class="me-2"> {{ request.session.first_name }} {{ request.session.last_name }}</strong>
-            {{ user_image }}
-         </a>
-         <div class="dropdown-menu dropdown-menu-end">
-            <a class="dropdown-item" href="{% url 'accounts:edit_profile' %}">Edit Profile</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
+         <div class="dropdown d-none d-lg-block">
+            <a class="nav-link dropdown-toggle justify-content-between" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" 
+            aria-expanded="false">
+            <strong class="me-2"> {{ request.session.first_name }} {{ request.session.last_name }}</strong>
+               {{ user_image }}
+            </a>
+            <div class="dropdown-menu dropdown-menu-end">
+               <a class="dropdown-item" href="{% url 'accounts:edit_profile' %}">Edit Profile</a>
+               <div class="dropdown-divider"></div>
+               <a class="dropdown-item" href="{% url 'accounts:logout' %}">Logout</a>
+            </div>
          </div>
-      </div>
+      </div>   
    </div>
 </nav>
 
 <!-- Main -->
-<main class="container">
-   <div class="mt-4" align="center">
-      <div class="col-lg-8 shadow rounded px-5 py-5 row justify-content-center text-start">
-         <h2 align="left" class="mb-3">Request Transfusion</h2>
-         <table style="width:50%" class="table table-hover">
-            <thead>
-               <tr align="center" class="table-dark">
-                  <th scope="col">Hospitals</th>
-                  <th scope="col">A+ amount</th>
-                  <th scope="col">A- amount</th>
-                  <th scope="col">B+ amount</th>
-                  <th scope="col">B- amount</th>
-                  <th scope="col">AB+ amount</th>
-                  <th scope="col">AB- amount</th>
-                  <th scope="col">O+ amount</th>
-                  <th scope="col">O- amount</th>
-               </tr>
-            </thead>
-            <tbody>
-               {% for h in hospitals %}
-                  <tr>
-                     <td>{{ h.name }}</td>
-                     <td>{{ h.blood_supply.aplus_amount }}</td>
-                     <td>{{ h.blood_supply.amin_amount }}</td>
-                     <td>{{ h.blood_supply.bplus_amount }}</td>
-                     <td>{{ h.blood_supply.bmin_amount }}</td>
-                     <td>{{ h.blood_supply.abplus_amount }}</td>
-                     <td>{{ h.blood_supply.abmin_amount }}</td>
-                     <td>{{ h.blood_supply.oplus_amount }}</td>
-                     <td>{{ h.blood_supply.omin_amount }}</td>
+<main class="container py-4">
+      <h2 align="left">Request Transfusion</h2>
+      <div class="row">
+         <div class="col"></div>
+         <div class="col-lg-8 shadow rounded px-5 py-5 row justify-content-center">
+            <table style="width: 50%" class="table table-hover">
+               <thead>
+                  <tr class="table-dark">
+                     <th scope="col">Hospitals</th>
+                     <th scope="col">A+ amount</th>
+                     <th scope="col">A- amount</th>
+                     <th scope="col">B+ amount</th>
+                     <th scope="col">B- amount</th>
+                     <th scope="col">AB+ amount</th>
+                     <th scope="col">AB- amount</th>
+                     <th scope="col">O+ amount</th>
+                     <th scope="col">O- amount</th>
                   </tr>
-               {% endfor %}
-            </tbody>
-         </table>
-         <form method="post" enctype="multipart/form-data" class="row justify-content-center">
-            {% csrf_token %}
-            <div class="mt">
-               {{ form.hospital.label_tag }}
-               {{ form.hospital }}
-               <small class="text-primary">{{ form.hospital.errors | striptags }}</small>
-            </div>
-            <div class="mt">
-               {{ form.transfusion_date.label_tag }}
-               {{ form.transfusion_date }}
-               <small class="text-primary">{{ form.transfusion_date.errors | striptags }}</small>
-            </div>
-            <div class="mt">
-               {{ form.requested_blood_type.label_tag }}
-               {{ form.requested_blood_type }}
-               <small class="text-primary">{{ form.requested_blood_type.errors | striptags }}</small>
-            </div>
-            <div class="col-lg-4">
-               <button type="submit" class="btn btn-primary mt-4 form-control">Save</button>   
-            </div>
-         </form>
+               </thead>
+               <tbody>
+                  {% for h in hospitals %}
+                     <tr>
+                        <td>{{ h.name }}</td>
+                        <td>{{ h.blood_supply.aplus_amount }}</td>
+                        <td>{{ h.blood_supply.amin_amount }}</td>
+                        <td>{{ h.blood_supply.bplus_amount }}</td>
+                        <td>{{ h.blood_supply.bmin_amount }}</td>
+                        <td>{{ h.blood_supply.abplus_amount }}</td>
+                        <td>{{ h.blood_supply.abmin_amount }}</td>
+                        <td>{{ h.blood_supply.oplus_amount }}</td>
+                        <td>{{ h.blood_supply.omin_amount }}</td>
+                     </tr>
+                  {% endfor %}
+               </tbody>
+            </table>
+            <form method="post" enctype="multipart/form-data" class="row justify-content-center">
+               {% csrf_token %}
+               <div class="mt">
+                  {{ form.hospital.label_tag }}
+                  {{ form.hospital }}
+                  <small class="text-primary">{{ form.hospital.errors | striptags }}</small>
+               </div>
+               <div class="mt">
+                  {{ form.transfusion_date.label_tag }}
+                  {{ form.transfusion_date }}
+                  <small class="text-primary">{{ form.transfusion_date.errors | striptags }}</small>
+               </div>
+               <div class="mt">
+                  {{ form.requested_blood_type.label_tag }}
+                  {{ form.requested_blood_type }}
+                  <small class="text-primary">{{ form.requested_blood_type.errors | striptags }}</small>
+               </div>
+               <div class="col-lg-4">
+                  <button type="submit" class="btn btn-primary mt-4 form-control">Save</button>   
+               </div>
+            </form>
+         </div>
+         <div class="col"></div>
       </div>
-   </div>
+      
+
 </main>
 
 
