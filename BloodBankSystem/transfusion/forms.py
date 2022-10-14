@@ -33,7 +33,7 @@ class TransfusionForm(ModelForm):
         elif blood_type == 'A-':
             choices = (('A-', 'A-'), ('O-', 'O-'))
         elif blood_type == 'O-':
-            choices = (('O-', 'O-'))
+            choices = (('O-', 'O-'),)
         elif blood_type == 'B-':
             choices = (('B-', 'B-'), ('O-', 'O-'))
         elif blood_type == 'AB-':
