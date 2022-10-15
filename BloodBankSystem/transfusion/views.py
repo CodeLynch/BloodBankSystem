@@ -88,7 +88,6 @@ class TransfusionView(View):
 
             try:
                 if is_available(blood_supply, blood_type):
-                    print("hello ", blood_type)
                     transfusion = form.save(commit=False)
                     transfusion.hospital = hospital
                     transfusion.status = 'Pending'
@@ -96,7 +95,7 @@ class TransfusionView(View):
                     transfusion.recipient = recipient
                     transfusion.requested_blood_type = blood_type
                     transfusion.save()
-                    messages.success(request, 'Transfusion recorded successfully!')
+                    messages.success(request, 'Transfusion request sent!')
                 else:
                     messages.error(request, 'Hospital has no ' + blood_type + ' blood in their supply.')
                 return redirect(reverse('accounts:index'))
@@ -110,17 +109,19 @@ def update_transfusion(request, id):
     if request.method == 'POST':
         if 'A' in request.POST:
             transfusion = Transfusion.objects.get(pk=id)
-            blood_type = transfusion.requested_blood_type
-            hospital = transfusion.hospital
-            blood_supply = BloodSupply.objects.get(pk=hospital.blood_supply_id)
-            if is_available(blood_supply, blood_type):
-                if update_blood_supply(blood_supply, blood_type):
-                    setattr(transfusion, 'status', 'Approved')
-                    transfusion.save(update_fields=['status'])
-                    messages.success(request, 'Transfusion request granted!')
-            else:
-                messages.error(request, 'You have no ' + blood_type + ' blood in your supply.')
-
+            try:
+                blood_type = transfusion.requested_blood_type
+                hospital = transfusion.hospital
+                blood_supply = BloodSupply.objects.get(pk=hospital.blood_supply_id)
+                if is_available(blood_supply, blood_type):
+                    if update_blood_supply(blood_supply, blood_type):
+                        setattr(transfusion, 'status', 'Approved')
+                        transfusion.save(update_fields=['status'])
+                        messages.success(request, 'Transfusion request granted!')
+                else:
+                    messages.error(request, 'You have no ' + blood_type + ' blood in your supply.')
+            except BloodSupply.DoesNotExist:
+                messages.error(request, 'No existing blood supply!')
         elif 'D' in request.POST:
             transfusion = Transfusion.objects.get(pk=id)
             setattr(transfusion, 'status', 'Declined')

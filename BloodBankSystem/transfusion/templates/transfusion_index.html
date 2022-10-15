@@ -53,36 +53,39 @@ Add Transfusion
       <div class="row justify-content-center">
          <div class="col-lg-8 shadow rounded px-5 py-5">
             <h2 align="left" class="mb-3">Request Transfusion</h2>
-            <table class="table table-hover">
-               <thead align="center">
-                  <tr class="table-dark">
-                     <th scope="col">Hospitals</th>
-                     <th scope="col">A+ amount</th>
-                     <th scope="col">A- amount</th>
-                     <th scope="col">B+ amount</th>
-                     <th scope="col">B- amount</th>
-                     <th scope="col">AB+ amount</th>
-                     <th scope="col">AB- amount</th>
-                     <th scope="col">O+ amount</th>
-                     <th scope="col">O- amount</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  {% for h in hospitals %}
-                     <tr>
-                        <td>{{ h.name }}</td>
-                        <td>{{ h.blood_supply.aplus_amount }}</td>
-                        <td>{{ h.blood_supply.amin_amount }}</td>
-                        <td>{{ h.blood_supply.bplus_amount }}</td>
-                        <td>{{ h.blood_supply.bmin_amount }}</td>
-                        <td>{{ h.blood_supply.abplus_amount }}</td>
-                        <td>{{ h.blood_supply.abmin_amount }}</td>
-                        <td>{{ h.blood_supply.oplus_amount }}</td>
-                        <td>{{ h.blood_supply.omin_amount }}</td>
+            <div class="overflow-hidden">
+               <table class="table table-hover">
+                  <thead align="center">
+                     <tr class="table-dark">
+                        <th scope="col">Hospitals</th>
+                        <th scope="col">A+ amount</th>
+                        <th scope="col">A- amount</th>
+                        <th scope="col">B+ amount</th>
+                        <th scope="col">B- amount</th>
+                        <th scope="col">AB+ amount</th>
+                        <th scope="col">AB- amount</th>
+                        <th scope="col">O+ amount</th>
+                        <th scope="col">O- amount</th>
                      </tr>
-                  {% endfor %}
-               </tbody>
-            </table>
+                  </thead>
+                  <tbody>
+                     {% for h in hospitals %}
+                        <tr>
+                           <td>{{ h.name }}</td>
+                           <td>{{ h.blood_supply.aplus_amount }}</td>
+                           <td>{{ h.blood_supply.amin_amount }}</td>
+                           <td>{{ h.blood_supply.bplus_amount }}</td>
+                           <td>{{ h.blood_supply.bmin_amount }}</td>
+                           <td>{{ h.blood_supply.abplus_amount }}</td>
+                           <td>{{ h.blood_supply.abmin_amount }}</td>
+                           <td>{{ h.blood_supply.oplus_amount }}</td>
+                           <td>{{ h.blood_supply.omin_amount }}</td>
+                        </tr>
+                     {% endfor %}
+                  </tbody>
+               </table>
+            </div>
+            
             <form method="post" enctype="multipart/form-data" class="row justify-content-center">
                {% csrf_token %}
                <div class="mt-2">
