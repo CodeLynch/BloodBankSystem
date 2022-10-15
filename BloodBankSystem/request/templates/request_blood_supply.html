@@ -54,6 +54,7 @@ Request Blood Supply
     <div class="row justify-content-center">
        <div class="col-lg-8 shadow rounded px-5 py-5">
         <h2 align="left" class="mb-3">Request Blood Supply</h2>
+        <div class="overflow-auto">
                 <table class="table table-hover">
                     <thead>
                         <tr align="center" class="table-dark">
@@ -85,6 +86,7 @@ Request Blood Supply
                         {% endfor %}
                     </tbody>
                 </table> 
+        </div>
                 
                     <form method="POST" class= "row justify-content-center">
                         {% csrf_token %}
