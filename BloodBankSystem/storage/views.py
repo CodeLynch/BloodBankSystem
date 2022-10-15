@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.views import View
 from django.contrib import messages
 from storage.forms import *
-from accounts.models import Donation, BloodBank, BloodSupply, Request
+from accounts.models import Donation, BloodBank, BloodSupply, Request, Hospital
 
 
 def is_approved(blood_supply, field_name):
@@ -130,10 +130,12 @@ def update_donation(request, id):
 def update_request(request, id):
     if request.method == 'POST':
         if 'A' in request.POST:
+            request_o = Request.objects.get(pk=id)
             if request.session['blood_supply_id'] is None:
                 messages.error(request, 'You do not have a blood supply')
+            elif request_o.hospital.blood_supply is None:
+                messages.error(request, request_o.hospital.name + ' has removed their blood supply')
             else:
-                request_o = Request.objects.get(pk=id)
                 # get blood type, quantity, and blood supply of giver and receiver
                 blood_type = request_o.blood_type
                 quantity = request_o.quantity
