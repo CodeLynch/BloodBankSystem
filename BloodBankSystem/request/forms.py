@@ -1,3 +1,5 @@
+from datetime import date, datetime
+from django.core.exceptions import ValidationError
 from django import forms
 from .models import *
 
@@ -26,3 +28,10 @@ class RequestBloodSupplyForm(forms.ModelForm):
         widgets = {
             'blood_type': forms.Select(attrs={'class': 'form-control'}),
         }
+
+    def clean_request_date(self):
+        req_date = datetime.strptime(self.data.get('request_date'), '%Y-%m-%d').date()
+        if req_date < date.today():
+            raise ValidationError('Date must be today or later!')
+        else:
+            return req_date

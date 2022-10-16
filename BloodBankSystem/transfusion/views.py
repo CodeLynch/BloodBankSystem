@@ -100,7 +100,7 @@ class TransfusionView(View):
                     messages.error(request, 'Hospital has no ' + blood_type + ' blood in their supply.')
                 return redirect(reverse('accounts:index'))
             except IntegrityError:
-                messages.error(request, "You can only receive transfusion once in a day.")
+                messages.error(request, "You can only request transfusion once in a day.")
                 return redirect(reverse('accounts:index'))
         return render(request, self.template, {'form': form})
 

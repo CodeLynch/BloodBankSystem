@@ -1,3 +1,5 @@
+from datetime import date, datetime
+from django.core.exceptions import ValidationError
 from django import forms
 from django.forms import ModelForm
 from accounts.models import Transfusion, Hospital
@@ -39,3 +41,10 @@ class TransfusionForm(ModelForm):
         elif blood_type == 'AB-':
             choices = (('A-', 'A-'), ('B-', 'B-'), ('AB-', 'AB-'), ('O-', 'O-'))
         self.fields['requested_blood_type'].choices = choices
+
+    def clean_transfusion_date(self):
+        transf_date = datetime.strptime(self.data.get('transfusion_date'), '%Y-%m-%d').date()
+        if transf_date < date.today():
+            raise ValidationError('Date must be today or later!')
+        else:
+            return transf_date
