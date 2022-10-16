@@ -178,4 +178,4 @@ class EditProfileView(View):
             except User.DoesNotExist:
                 user = None
             return redirect(reverse('accounts:index'))
-        return render(request, self.template, {'form': form})
+        return render(request, self.template, {'form': form, 'user_image': user.image_tag})

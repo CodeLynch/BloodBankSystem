@@ -77,6 +77,8 @@ class TransfusionView(View):
             return render(request, self.template, {'form': form, 'hospitals': hospitals, 'user_image': user.image_tag})
 
     def post(self, request):
+        user = User.objects.get(username=request.session['username'])
+        hospitals = Hospital.objects.exclude(blood_supply_id=None)
         form = TransfusionForm(request.session['blood_type'], request.POST)
         user_id = request.POST['hospital']
         if form.is_valid():
@@ -102,7 +104,7 @@ class TransfusionView(View):
             except IntegrityError:
                 messages.error(request, "You can only request transfusion once in a day.")
                 return redirect(reverse('accounts:index'))
-        return render(request, self.template, {'form': form})
+        return render(request, self.template, {'form': form, 'hospitals': hospitals, 'user_image': user.image_tag})
 
 
 def update_transfusion(request, id):

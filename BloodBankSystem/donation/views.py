@@ -17,6 +17,7 @@ class DonationView(View):
         return render(request, self.template, {'form': form, 'blood_banks': blood_banks, 'user_image': user.image_tag})
 
     def post(self, request):
+        user = User.objects.get(username=request.session['username'])
         form = DonationForm(request.POST)
         user_id = request.POST['blood_bank']
         if form.is_valid():
@@ -38,4 +39,4 @@ class DonationView(View):
             except IntegrityError:
                 messages.error(request, 'You can only donate once in a day.')
                 return redirect(reverse('accounts:index'))
-        return render(request, self.template, {'form': form})
+        return render(request, self.template, {'form': form, 'user_image': user.image_tag})
