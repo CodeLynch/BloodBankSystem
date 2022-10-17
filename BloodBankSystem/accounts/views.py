@@ -123,20 +123,23 @@ class EditProfileView(View):
     template = 'edit_profile.html'
 
     def get(self, request):
-        user = User.objects.get(username=request.session['username'])
-        if user.type == 'I':
-            individual = Individual.objects.get(username=user.username)
-            if individual.individual_type == 'R':
-                form = RecipientForm(instance=individual)
-            else:
-                form = DonorForm(instance=individual)
-        elif user.type == 'O':
-            org = Organization.objects.get(username=user.username)
-            if org.org_type == 'H':
-                form = HospitalForm(instance=org)
-            else:
-                form = BloodBankForm(instance=org)
-        return render(request, self.template, {'form': form, 'user_image': user.image_tag})
+        if 'username' not in request.session:
+            return redirect(reverse('accounts:login'))
+        else:
+            user = User.objects.get(username=request.session['username'])
+            if user.type == 'I':
+                individual = Individual.objects.get(username=user.username)
+                if individual.individual_type == 'R':
+                    form = RecipientForm(instance=individual)
+                else:
+                    form = DonorForm(instance=individual)
+            elif user.type == 'O':
+                org = Organization.objects.get(username=user.username)
+                if org.org_type == 'H':
+                    form = HospitalForm(instance=org)
+                else:
+                    form = BloodBankForm(instance=org)
+            return render(request, self.template, {'form': form, 'user_image': user.image_tag})
 
     def post(self, request):
         user = User.objects.get(username=request.session['username'])

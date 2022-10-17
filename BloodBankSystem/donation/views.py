@@ -11,10 +11,13 @@ class DonationView(View):
     template = 'donation_index.html'
 
     def get(self, request):
-        user = User.objects.get(username=request.session['username'])
-        form = DonationForm()
-        blood_banks = BloodBank.objects.exclude(blood_supply_id=None)
-        return render(request, self.template, {'form': form, 'blood_banks': blood_banks, 'user_image': user.image_tag})
+        if 'username' not in request.session:
+            return redirect(reverse('accounts:login'))
+        else:
+            user = User.objects.get(username=request.session['username'])
+            form = DonationForm()
+            blood_banks = BloodBank.objects.exclude(blood_supply_id=None)
+            return render(request, self.template, {'form': form, 'blood_banks': blood_banks, 'user_image': user.image_tag})
 
     def post(self, request):
         user = User.objects.get(username=request.session['username'])

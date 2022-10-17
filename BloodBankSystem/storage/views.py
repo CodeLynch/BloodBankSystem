@@ -54,10 +54,10 @@ class UpdateBloodSupplyView(View):
     template = 'update_blood_supply.html'
 
     def get(self, request):
-        user = User.objects.get(username=request.session['username'])
         if 'username' not in request.session:
             return redirect(reverse('accounts:login'))
         else:
+            user = User.objects.get(username=request.session['username'])
             bloodSupply = BloodSupply.objects.get(pk=request.session['blood_supply_id'])
             form = BloodSupplyForm(instance=bloodSupply)
             return render(request, self.template, {'form': form, 'user_image': user.image_tag})
